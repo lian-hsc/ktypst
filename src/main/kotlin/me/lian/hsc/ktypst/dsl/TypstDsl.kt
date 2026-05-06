@@ -115,7 +115,7 @@ class Typst {
         fontPaths,
         ignoreSystemFonts,
         ignoreEmbeddedFonts,
-        packageCacheDirectory,
+        packageDirectory,
         packageCacheDirectory,
         creationTime,
         pages,
