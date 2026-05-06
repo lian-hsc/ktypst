@@ -86,30 +86,27 @@ object CommandTypstBackend : TypstBackend {
 
         withContext(Dispatchers.IO) { process.waitFor() }
 
-        val stdout = stdoutDeferred.await().decodeToString()
+        val stdout = stdoutDeferred.await()
         val stderr = stderrDeferred.await().decodeToString()
 
         if (process.exitValue() != 0) {
-            throw RuntimeException("Typst compilation failed with exit code ${process.exitValue()}: $stderr")
+            return@coroutineScope TypstCompileOutput(
+                TypstCompileOutput.Status.Failure,
+                stderr,
+                emptyList(),
+                null
+            )
         }
 
-        println(stdout)
+        println(stderr)
 
-        val outputLines = stdout.trim().lines().toMutableList()
-        val downloadedDependencies = mutableListOf<String>()
-
-        while (outputLines.isNotEmpty() && outputLines.first().startsWith("downloading")) {
-            val downloaded = outputLines.removeFirst()
-            outputLines.removeFirst()
-            outputLines.removeFirst()
-
-            downloadedDependencies.add(downloaded.removePrefix("downloading").trim())
-        }
-
-        val artifact = outputLines.joinToString("\n")
         TypstCompileOutput(
-            downloadedDependencies,
-            if (artifact.isNotBlank()) Artifact(artifact) else null
+            TypstCompileOutput.Status.Success,
+            null,
+            stderr.lines()
+                .filter { it.startsWith("downloading ") }
+                .map { it.removePrefix("downloading ").trim() },
+            if (stdout.isNotEmpty()) Artifact(stdout) else null
         )
     }
 
