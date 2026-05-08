@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:CommandTypstBackend.kt:CommandTypstBackend$private fun createCommand</ID>
+    <ID>LabeledExpression:CommandTypstBackend.kt:CommandTypstBackend$@coroutineScope</ID>
+    <ID>LongMethod:CommandTypstBackendArgumentTest.kt:CommandTypstBackendArgumentTest$@Test @OptIn(ExperimentalTypstFeature::class) fun `passes compile command arguments to process builder`</ID>
+  </CurrentIssues>
+</SmellBaseline>

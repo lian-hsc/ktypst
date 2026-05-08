@@ -1,5 +1,6 @@
 package me.lian.hsc.ktypst.dsl
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import me.lian.hsc.ktypst.backend.TypstBackend
 import me.lian.hsc.ktypst.data.command.*
@@ -20,10 +21,10 @@ class TypstDslTest {
     fun `typst dsl builds command and calls backend`() = runBlocking {
         val fixedCreationTime = ZonedDateTime.parse("2024-01-01T00:00:00Z")
         val expectedOutput = TypstCompileOutput(
-            TypstCompileOutput.Status.Success,
-            null,
-            emptyList(),
-            Artifact("ok".encodeToByteArray())
+            status = TypstCompileOutput.Status.Success,
+            error = null,
+            downloadedPackages = emptyList(),
+            stdArtifact = Artifact("ok".encodeToByteArray())
         )
         val backend = CapturingBackend(expectedOutput)
 
@@ -112,7 +113,10 @@ class TypstDslTest {
         var lastCommand: TypstCompileCommand? = null
             private set
 
-        override suspend fun execute(command: TypstCompileCommand): TypstCompileOutput {
+        override suspend fun execute(
+            command: TypstCompileCommand,
+            dispatcher: CoroutineDispatcher
+        ): TypstCompileOutput {
             calls++
             lastCommand = command
             return response

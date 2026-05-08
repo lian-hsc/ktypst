@@ -13,16 +13,25 @@ annotation class TypstMarker
 @TypstMarker
 class Typst {
 
+    private var _input: Input? = null
+    private var _output: Output? = null
+    private val inputs: MutableMap<String, String> = mutableMapOf()
+    private val fontPaths: MutableList<Path> = mutableListOf()
+    private val pages: MutableList<Pages> = mutableListOf()
+    private val pdfStandard: MutableList<PdfStandard> = mutableListOf()
+    private val features: MutableList<TypstFeatures> = mutableListOf()
+
+
     var input: Input
-        get() = _input ?: throw IllegalStateException("Input is not defined")
+        get() = checkNotNull(_input) { "Input is not defined" }
         set(value) {
-            if (_input != null) throw IllegalStateException("Input is already defined")
+            check(_input == null) { "Input is already defined" }
             _input = value
         }
     var output: Output
-        get() = _output ?: throw IllegalStateException("Output is not defined")
+        get() = checkNotNull(_output) { "Output is not defined" }
         set(value) {
-            if (_output != null) throw IllegalStateException("Output is already defined")
+            check(_output == null) { "Output is already defined" }
             _output = value
         }
 
@@ -40,14 +49,6 @@ class Typst {
     var dependenciesFormat: DependenciesFormat? = null
     var jobs: Int? = null
     var diagnosticsFormat: DiagnosticsFormat? = null
-
-    private var _input: Input? = null
-    private var _output: Output? = null
-    private val inputs: MutableMap<String, String> = mutableMapOf()
-    private val fontPaths: MutableList<Path> = mutableListOf()
-    private val pages: MutableList<Pages> = mutableListOf()
-    private val pdfStandard: MutableList<PdfStandard> = mutableListOf()
-    private val features: MutableList<TypstFeatures> = mutableListOf()
 
     operator fun String.unaryPlus() {
         input = Input.Content(this)
@@ -70,7 +71,7 @@ class Typst {
     }
 
     fun inputForTypst(key: String, value: String) {
-        if (key in inputs) throw IllegalStateException("Input is already defined")
+        check(key !in inputs) { "Input is already defined" }
         inputs[key] = value
     }
 
@@ -82,12 +83,14 @@ class Typst {
         this.pages += pages
     }
 
-    operator fun Pages.unaryPlus() = pages(this)
-    fun singlePage(page: UInt) = pages(Pages.SinglePage(page))
-    fun pageRange(startInclusive: UInt, endExclusive: UInt) = pages(Pages.ClosedRange(startInclusive, endExclusive))
-    fun pageRange(range: UIntRange) = pageRange(range.first, range.last)
-    fun pagesFrom(startInclusive: UInt) = pages(Pages.OpenEndRange(startInclusive))
-    fun pagesUntil(endInclusive: UInt) = pages(Pages.OpenStartRange(endInclusive))
+    operator fun Pages.unaryPlus(): Unit = pages(this)
+    fun singlePage(page: UInt): Unit = pages(Pages.SinglePage(page))
+    fun pageRange(startInclusive: UInt, endExclusive: UInt): Unit =
+        pages(Pages.ClosedRange(startInclusive, endExclusive))
+
+    fun pageRange(range: UIntRange): Unit = pageRange(range.first, range.last)
+    fun pagesFrom(startInclusive: UInt): Unit = pages(Pages.OpenEndRange(startInclusive))
+    fun pagesUntil(endInclusive: UInt): Unit = pages(Pages.OpenStartRange(endInclusive))
 
     operator fun PdfStandard.unaryPlus() {
         pdfStandard += this
@@ -98,27 +101,27 @@ class Typst {
     }
 
     fun createCommand() = TypstCompileCommand(
-        _input ?: throw IllegalStateException("Input was not defined"),
-        _output ?: throw IllegalStateException("Output was not defined"),
-        cert,
-        format,
-        projectRoot,
-        inputs,
-        fontPaths,
-        ignoreSystemFonts,
-        ignoreEmbeddedFonts,
-        packageDirectory,
-        packageCacheDirectory,
-        creationTime,
-        pages,
-        pdfStandard.toList(),
-        noPdfTags,
-        ppi,
-        dependenciesPath,
-        dependenciesFormat,
-        jobs,
-        features.toList(),
-        diagnosticsFormat
+        input = checkNotNull(_input) { "Input was not defined" },
+        output = checkNotNull(_output) { "Output was not defined" },
+        cert = cert,
+        format = format,
+        projectRoot = projectRoot,
+        inputs = inputs,
+        fontPaths = fontPaths,
+        ignoreSystemFonts = ignoreSystemFonts,
+        ignoreEmbeddedFonts = ignoreEmbeddedFonts,
+        packageDirectory = packageDirectory,
+        packageCacheDirectory = packageCacheDirectory,
+        creationTime = creationTime,
+        pages = pages,
+        pdfStandards = pdfStandard.toList(),
+        noPdfTags = noPdfTags,
+        ppi = ppi,
+        dependenciesPath = dependenciesPath,
+        dependenciesFormat = dependenciesFormat,
+        jobs = jobs,
+        features = features.toList(),
+        diagnosticsFormat = diagnosticsFormat
     )
 
 }

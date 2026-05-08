@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>LongMethod:TypstDslTest.kt:TypstDslTest$@Test @OptIn(ExperimentalTypstFeature::class) fun `typst dsl builds command and calls backend`</ID>
+    <ID>TooManyFunctions:TypstDsl.kt:Typst</ID>
+  </CurrentIssues>
+</SmellBaseline>

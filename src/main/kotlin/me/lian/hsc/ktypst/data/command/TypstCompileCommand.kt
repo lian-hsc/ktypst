@@ -8,8 +8,10 @@ import java.time.ZonedDateTime
  *
  * @property input Input files for Typst.
  * @property output Where to put the output file (PDF, PNG, SVG, or HTML).
- * For output formats emitting one file per page (PNG & SVG), a page number template must be present if the source document renders to multiple pages.
- * Use `{p}` for page numbers, `{0p}` for zero padded page numbers and `{t}` for page count. For example, `page-{0p}-of-{t}.png` creates `page-01-of-10.png`, `page-02-of-10.png`, and so on.
+ * For output formats emitting one file per page (PNG & SVG),
+ * a page number template must be present if the source document renders to multiple pages.
+ * Use `{p}` for page numbers, `{0p}` for zero padded page numbers and `{t}` for page count.
+ * For example, `page-{0p}-of-{t}.png` creates `page-01-of-10.png`, `page-02-of-10.png`, and so on.
  * @property cert Path to a custom CA certificate to use when making network requests.
  * @property format The format of the output file, inferred from the extension by default.
  * @property projectRoot Configures the project root (for absolute paths).
@@ -22,12 +24,15 @@ import java.time.ZonedDateTime
  * @property creationTime The document's creation date formatted as a UNIX timestamp.
  * @property pages Which pages to export. When unspecified, all pages are exported.
  * @property pdfStandards One (or multiple comma-separated) PDF standards that Typst will enforce conformance with.
- * @property noPdfTags By default, even when not producing a `PDF/UA-1` document, a tagged PDF document is written to provide a baseline of accessibility.
- * In some circumstances (for example when trying to reduce the size of a document) it can be desirable to disable tagged PDF.
+ * @property noPdfTags By default, even when not producing a `PDF/UA-1` document,
+ * a tagged PDF document is written to provide a baseline of accessibility.
+ * In some circumstances (for example, when trying to reduce the size of a document)
+ * it can be desirable to disable tagged PDF.
  * @property ppi The PPI (pixels per inch) to use for PNG export (default: 144)
  * @property dependenciesPath File path to which a list of current compilation's dependencies will be written.
  * @property dependenciesFormat File format to use for dependencies.
- * @property jobs Number of parallel jobs spawned during compilation. Defaults to number of CPUs. Setting it to 1 disables parallelism.
+ * @property jobs Number of parallel jobs spawned during compilation.
+ * Defaults to number of CPUs. Setting it to 1 disables parallelism.
  * @property features Enables in-development features that may be changed or removed at any time.
  * @property diagnosticsFormat The format to emit diagnostics in.
  */

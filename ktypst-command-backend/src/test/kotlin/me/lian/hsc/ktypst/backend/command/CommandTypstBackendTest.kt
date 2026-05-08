@@ -11,6 +11,7 @@ import java.nio.file.Files
 import java.security.MessageDigest
 import java.time.Instant
 import java.time.ZoneOffset
+import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -65,25 +66,28 @@ class CommandTypstBackendTest {
         assertEquals(expectedHash, sha256Hex(artifact.content))
     }
 
-    private suspend fun assertTempFileMatchesExpected(format: OutputFormat, expectedResource: String, suffix: String) =
-        coroutineScope {
-            val tmpFile = Files.createTempFile("ktypst-", suffix)
-            try {
-                val output = CommandTypstBackend.execute(
-                    commandFor(EXAMPLE_DOCUMENT, format, output = Output.File(tmpFile))
-                )
+    private suspend fun assertTempFileMatchesExpected(
+        format: OutputFormat,
+        expectedResource: String,
+        suffix: String
+    ): Unit = coroutineScope {
+        val tmpFile = Files.createTempFile("ktypst-", suffix)
+        try {
+            val output = CommandTypstBackend.execute(
+                commandFor(EXAMPLE_DOCUMENT, format, output = Output.File(tmpFile))
+            )
 
-                assertEquals(TypstCompileOutput.Status.Success, output.status)
-                assertNull(output.error)
-                assertNull(output.stdArtifact)
+            assertEquals(TypstCompileOutput.Status.Success, output.status)
+            assertNull(output.error)
+            assertNull(output.stdArtifact)
 
-                val expected = expectedResourceBytes(expectedResource)
-                val actual = Files.readAllBytes(tmpFile)
-                assertEquals(expected.toList(), actual.toList())
-            } finally {
-                Files.deleteIfExists(tmpFile)
-            }
+            val expected = expectedResourceBytes(expectedResource)
+            val actual = Files.readAllBytes(tmpFile)
+            assertEquals(expected.toList(), actual.toList())
+        } finally {
+            Files.deleteIfExists(tmpFile)
         }
+    }
 
     private fun expectedResourceBytes(path: String): ByteArray =
         checkNotNull(this::class.java.classLoader.getResourceAsStream(path)) {
@@ -118,7 +122,7 @@ class CommandTypstBackendTest {
     private fun sha256Hex(value: ByteArray): String =
         MessageDigest.getInstance("SHA-256")
             .digest(value)
-            .joinToString("") { "%02x".format(it) }
+            .joinToString("") { "%02x".format(Locale.US, it) }
 
     private companion object {
         private val FIXED_CREATION_TIME = Instant.ofEpochSecond(1704067200).atZone(ZoneOffset.UTC)
