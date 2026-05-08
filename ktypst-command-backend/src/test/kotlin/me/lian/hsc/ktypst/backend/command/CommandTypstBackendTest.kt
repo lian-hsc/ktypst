@@ -1,7 +1,7 @@
 package me.lian.hsc.ktypst.backend.command
 
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import me.lian.hsc.ktypst.data.command.Input
 import me.lian.hsc.ktypst.data.command.Output
 import me.lian.hsc.ktypst.data.command.OutputFormat
@@ -19,21 +19,21 @@ import kotlin.test.assertNull
 class CommandTypstBackendTest {
 
     @Test
-    fun `compile to result returns deterministic hashes for pdf png and svg`() = runBlocking {
+    fun `compile to result returns deterministic hashes for pdf png and svg`() = runTest {
         assertHashForFormat(OutputFormat.PDF, "daa10a05ee45b5ff8904764380e58fc605acfcc6e25978f919a6a17a796a271a")
         assertHashForFormat(OutputFormat.PNG, "0543633e41d9ec44fc9dcc057320715bbf86fb73a87bc494ddb29c25923d2546")
         assertHashForFormat(OutputFormat.SVG, "35f065e44c1b8a75c0587b31b4998e240fc3b1c081041bfc1631eb06ab905fb2")
     }
 
     @Test
-    fun `compile test`() = runBlocking {
+    fun `compile test`() = runTest {
         assertTempFileMatchesExpected(OutputFormat.PDF, "expected/hello.pdf", ".pdf")
         assertTempFileMatchesExpected(OutputFormat.PNG, "expected/hello.png", ".png")
         assertTempFileMatchesExpected(OutputFormat.SVG, "expected/hello.svg", ".svg")
     }
 
     @Test
-    fun `compile failure returns failure output`() = runBlocking {
+    fun `compile failure returns failure output`() = runTest {
         val output = CommandTypstBackend.execute(
             commandFor(
                 source = "#let x =",

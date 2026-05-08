@@ -1,7 +1,7 @@
 package me.lian.hsc.ktypst.backend.command
 
 import io.mockk.*
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import me.lian.hsc.ktypst.data.command.*
 import me.lian.hsc.ktypst.data.output.TypstCompileOutput
 import me.lian.hsc.ktypst.util.ExperimentalTypstFeature
@@ -19,7 +19,7 @@ class CommandTypstBackendArgumentTest {
 
     @Test
     @OptIn(ExperimentalTypstFeature::class)
-    fun `passes compile command arguments to process builder`() = runBlocking {
+    fun `passes compile command arguments to process builder`() = runTest {
         val process = mockk<Process>()
         val chainedBuilder = mockk<ProcessBuilder>()
         val commandSlot = slot<List<String>>()
