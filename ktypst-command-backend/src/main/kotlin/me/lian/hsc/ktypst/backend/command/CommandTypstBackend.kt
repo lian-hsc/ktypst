@@ -25,6 +25,7 @@ object CommandTypstBackend : TypstBackend {
                 add("--color=never")
                 add("compile")
 
+                if (command.cert != null) add("--cert=${command.cert!!.absolutePathString()}")
                 if (command.format != null) add("--format=${command.format!!.value}")
                 if (command.projectRoot != null) add("--project-root=${command.projectRoot!!.absolutePathString()}")
 
