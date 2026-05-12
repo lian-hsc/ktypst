@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>LongParameterList:DSL.kt:TreeDsl$internal fun toModel: TreeNodeModel</ID>
+    <ID>NamedArguments:Layout.kt:PackedTreeLayoutEngine$TreeNodeLayout(model, 0.0, 0.0, emptyList())</ID>
+    <ID>NamedArguments:Layout.kt:PackedTreeLayoutEngine$TreeNodeLayout(model, rootX, 0.0, positionedChildren)</ID>
+    <ID>NamedArguments:Layout.kt:WideTreeLayoutEngine$TreeNodeLayout( model, offset + model.shape.width / 2.0, 0.0, emptyList() )</ID>
+    <ID>NamedArguments:Layout.kt:WideTreeLayoutEngine$TreeNodeLayout(model, rootX, 0.0, positionedChildren)</ID>
+    <ID>NamedArguments:Render.kt:EmptyContentAsEmptyRenderEngine$create( Point(node.x, node.y), name = node.model.key, fill = node.model.fill, stroke = node.model.nodeStroke, )</ID>
+    <ID>NamedArguments:Render.kt:EmptyContentAsKeyRenderEngine$create( Point(node.x, node.y), name = node.model.key, fill = node.model.fill, stroke = node.model.nodeStroke, )</ID>
+    <ID>VarCouldBeVal:DSL.kt:TreeDsl$private var _key: String? = null</ID>
+  </CurrentIssues>
+</SmellBaseline>

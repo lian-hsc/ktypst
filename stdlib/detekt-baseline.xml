@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:Color.kt:Color.LinearRgb$255</ID>
+    <ID>MagicNumber:Color.kt:Color.Rgb$255</ID>
+    <ID>MagicNumber:Gradient.kt:Gradient.Conic$0.5</ID>
+    <ID>MagicNumber:Gradient.kt:Gradient.Radial$0.5</ID>
+    <ID>MagicNumber:Ratio.kt:100</ID>
+    <ID>MaxLineLength:Gradient.kt:Gradient.Radial$*</ID>
+    <ID>MaxLineLength:Gradient.kt:Gradient.Stops.Named.Turbo$*</ID>
+  </CurrentIssues>
+</SmellBaseline>
