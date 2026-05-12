@@ -59,3 +59,35 @@ jobs:
 
       - name: Run check for subproject
         run: ./gradlew --no-daemon ${{ matrix.project }}:check
+
+      - name: Resolve project paths
+        if: always()
+        id: project-paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          project_dir="${{ matrix.project }}"
+          project_dir="${project_dir#:}"
+          project_dir="${project_dir//:/\/}"
+          artifact_suffix="${project_dir//\//-}"
+          echo "project_dir=$project_dir" >> "$GITHUB_OUTPUT"
+          echo "artifact_suffix=$artifact_suffix" >> "$GITHUB_OUTPUT"
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports-${{ steps.project-paths.outputs.artifact_suffix }}
+          if-no-files-found: warn
+          path: |
+            ${{ steps.project-paths.outputs.project_dir }}/build/reports/tests/test/**
+            ${{ steps.project-paths.outputs.project_dir }}/build/test-results/test/**
+
+      - name: Upload detekt reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-reports-${{ steps.project-paths.outputs.artifact_suffix }}
+          if-no-files-found: warn
+          path: |
+            ${{ steps.project-paths.outputs.project_dir }}/build/reports/detekt/**
