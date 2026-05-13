@@ -133,4 +133,13 @@ data class Stroke(
 
     }
 
+    companion object {
+
+        /**
+         * A stroke that should not be rendered.
+         */
+        val None = Stroke(paint = Paint.None)
+
+    }
+
 }

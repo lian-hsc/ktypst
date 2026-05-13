@@ -19,11 +19,24 @@ interface TreeRenderEngine {
  */
 object EmptyContentAsKeyRenderEngine : TreeRenderEngine {
 
-    override fun render(node: TreeNodeLayout): String = buildString { render(node) }
+    override fun render(node: TreeNodeLayout): String = buildString {
+        appendLine("""
+            #set page(width: auto, height: auto, fill: none, margin: 1em)
+
+            #import "@preview/cetz:0.5.1"
+
+            #cetz.canvas({
+            import cetz.draw: *
+        """.trimIndent())
+
+        render(node)
+
+        appendLine("})")
+    }
 
     private fun StringBuilder.render(node: TreeNodeLayout) {
         appendLine(
-            node.model.shape.create(
+            node.model.cetzShape.create(
                 Point(node.x, node.y),
                 name = node.model.key,
                 fill = node.model.fill,
@@ -37,7 +50,7 @@ object EmptyContentAsKeyRenderEngine : TreeRenderEngine {
 
         node.children.forEach {
             render(it)
-            appendLine("line(\"${node.model.key}\", \"${it.model.key}\", stroke: ${node.model.connectionStroke.value})")
+            appendLine(it.model.connectionStroke.create("\"${node.model.key}\"", "\"${it.model.key}\""))
         }
     }
 
@@ -52,7 +65,7 @@ object EmptyContentAsEmptyRenderEngine : TreeRenderEngine {
 
     private fun StringBuilder.render(node: TreeNodeLayout) {
         appendLine(
-            node.model.shape.create(
+            node.model.cetzShape.create(
                 Point(node.x, node.y),
                 name = node.model.key,
                 fill = node.model.fill,
@@ -68,7 +81,7 @@ object EmptyContentAsEmptyRenderEngine : TreeRenderEngine {
 
         node.children.forEach {
             render(it)
-            appendLine("line(\"${node.model.key}\", \"${it.model.key}\", stroke: ${node.model.connectionStroke.value})")
+            appendLine(it.model.connectionStroke.create("\"${node.model.key}\"", "\"${it.model.key}\""))
         }
     }
 

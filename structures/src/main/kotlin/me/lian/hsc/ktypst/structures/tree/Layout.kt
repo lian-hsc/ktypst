@@ -27,7 +27,7 @@ interface TreeLayoutEngine {
  */
 fun assignY(node: TreeNodeLayout, y: Double): TreeNodeLayout {
     val children = node.children.map {
-        val childY = y - node.model.shape.height / 2 - node.model.levelSpace - it.model.shape.height / 2
+        val childY = y - node.model.cetzShape.height / 2 - node.model.levelSpace - it.model.cetzShape.height / 2
         assignY(it, childY)
     }
 
@@ -56,8 +56,8 @@ object PackedTreeLayoutEngine : TreeLayoutEngine {
             // no children, just lay out the node
             return Subtree(
                 TreeNodeLayout(model, 0.0, 0.0, emptyList()),
-                mapOf(0 to -model.shape.width / 2.0),
-                mapOf(0 to model.shape.width / 2.0)
+                mapOf(0 to -model.cetzShape.width / 2.0),
+                mapOf(0 to model.cetzShape.width / 2.0)
             )
         }
 
@@ -101,13 +101,13 @@ object PackedTreeLayoutEngine : TreeLayoutEngine {
         }
 
         // find x position of the root node
-        val leftMost = positionedChildren.minOf { it.x - it.model.shape.width / 2 }
-        val rightMost = positionedChildren.maxOf { it.x + it.model.shape.width / 2 }
+        val leftMost = positionedChildren.minOf { it.x - it.model.cetzShape.width / 2 }
+        val rightMost = positionedChildren.maxOf { it.x + it.model.cetzShape.width / 2 }
         val rootX = (leftMost + rightMost) / 2
 
         // add root node to bounding box
-        combinedLeft[0] = rootX - model.shape.width / 2
-        combinedRight[0] = rootX + model.shape.width / 2
+        combinedLeft[0] = rootX - model.cetzShape.width / 2
+        combinedRight[0] = rootX + model.cetzShape.width / 2
 
         // return bounding box of the root node
         return Subtree(
@@ -150,12 +150,12 @@ object WideTreeLayoutEngine : TreeLayoutEngine {
         if (model.children.isEmpty()) {
             return Subtree(
                 TreeNodeLayout(
-                    model,
-                    offset + model.shape.width / 2.0,
-                    0.0,
-                    emptyList()
+                    model = model,
+                    x = offset + model.cetzShape.width / 2.0,
+                    y = 0.0,
+                    children = emptyList()
                 ),
-                model.shape.width
+                model.cetzShape.width
             )
         }
 
@@ -164,7 +164,7 @@ object WideTreeLayoutEngine : TreeLayoutEngine {
         val childrenWidth =
             childWidths.sum() + model.siblingSpace * (childWidths.size - 1)
 
-        val width = maxOf(model.shape.width, childrenWidth)
+        val width = maxOf(model.cetzShape.width, childrenWidth)
 
         var childOffset = offset + (width - childrenWidth) / 2.0
 
@@ -187,14 +187,14 @@ object WideTreeLayoutEngine : TreeLayoutEngine {
 
     private fun measureSubtree(model: TreeNodeModel): Double {
         if (model.children.isEmpty()) {
-            return model.shape.width
+            return model.cetzShape.width
         }
 
         val childrenWidth =
             model.children.sumOf { measureSubtree(it) } +
                 model.siblingSpace * (model.children.size - 1)
 
-        return maxOf(model.shape.width, childrenWidth)
+        return maxOf(model.cetzShape.width, childrenWidth)
     }
 
 }

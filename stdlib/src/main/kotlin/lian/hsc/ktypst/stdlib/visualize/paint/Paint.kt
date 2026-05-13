@@ -10,5 +10,14 @@ sealed interface Paint {
      */
     val value: String
 
+    companion object {
+
+        /**
+         * A paint that should not be rendered.
+         */
+        val None = Color.Rgb(red = 0, green = 0, blue = 0, alpha = 0.0)
+
+    }
+
 }
 

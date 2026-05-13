@@ -1,6 +1,7 @@
 package me.lian.hsc.ktypst.structures.tree
 
-import lian.hsc.ktypst.stdlib.cetz.Shape
+import lian.hsc.ktypst.stdlib.cetz.CetzLine
+import lian.hsc.ktypst.stdlib.cetz.CetzShape
 import lian.hsc.ktypst.stdlib.visualize.Stroke
 import lian.hsc.ktypst.stdlib.visualize.paint.Color
 import lian.hsc.ktypst.stdlib.visualize.paint.Paint
@@ -13,11 +14,11 @@ import me.lian.hsc.ktypst.structures.util.NotNullable
 data class TreeNodeModel(
     val key: String,
     val content: String?,
-    val shape: Shape,
+    val cetzShape: CetzShape,
     val fill: Paint,
     val contentFill: Paint,
     val nodeStroke: Stroke,
-    val connectionStroke: Stroke,
+    val connectionStroke: CetzLine,
     val siblingSpace: Double,
     val levelSpace: Double,
     val children: List<TreeNodeModel>
@@ -29,11 +30,11 @@ data class TreeNodeModel(
 @StructureDslMarker
 class TreeNodeStyleDsl {
 
-    var shape: Shape? = null
+    var cetzShape: CetzShape? = null
     var fill: Paint? = null
     var contentFill: Paint? = null
     var nodeStroke: Stroke? = null
-    var connectionStroke: Stroke? = null
+    var connectionStroke: CetzLine? = null
 
     var siblingSpace: Double? = null
     var levelSpace: Double? = null
@@ -78,15 +79,15 @@ class TreeDsl {
     }
 
     internal fun toModel(
-        shape: Shape = Shape.Circle(2.0),
+        cetzShape: CetzShape = CetzShape.Circle(2.0),
         fill: Paint = Color.Named.White,
         contentFill: Paint = Color.Named.Black,
         nodeStroke: Stroke = Stroke(),
-        connectionStroke: Stroke = Stroke(),
+        connectionStroke: CetzLine = CetzLine(),
         siblingSpace: Double = 1.0,
         levelSpace: Double = 2.0,
     ): TreeNodeModel {
-        val newShape = style?.shape ?: shape
+        val newShape = style?.cetzShape ?: cetzShape
         val newFill = style?.fill ?: fill
         val newContentFill = style?.contentFill ?: contentFill
         val newNodeStroke = style?.nodeStroke ?: nodeStroke
@@ -97,7 +98,7 @@ class TreeDsl {
         return TreeNodeModel(
             key = key,
             content = content,
-            shape = newShape,
+            cetzShape = newShape,
             fill = newFill,
             contentFill = newContentFill,
             nodeStroke = newNodeStroke,
@@ -106,7 +107,7 @@ class TreeDsl {
             levelSpace = newLevelSpace,
             children = children.map {
                 it.toModel(
-                    shape = newShape,
+                    cetzShape = newShape,
                     fill = newFill,
                     contentFill = newContentFill,
                     nodeStroke = newNodeStroke,
@@ -121,17 +122,7 @@ class TreeDsl {
     internal fun build(layoutEngine: TreeLayoutEngine, renderEngine: TreeRenderEngine): String {
         val model = toModel()
         val layout = layoutEngine.layout(model)
-        return """
-            #set page(width: auto, height: auto, fill: none, margin: 1em)
-
-            #import "@preview/cetz:0.5.1"
-
-            #cetz.canvas({
-                import cetz.draw: *
-
-                ${renderEngine.render(layout)}
-            })
-        """.trimIndent()
+        return renderEngine.render(layout)
     }
 
 }

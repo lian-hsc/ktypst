@@ -14,7 +14,7 @@ import lian.hsc.ktypst.stdlib.visualize.paint.Paint
  *
  * You can create your own shapes by implementing this interface.
  */
-interface Shape {
+interface CetzShape {
 
     /**
      * The width of the shape.
@@ -56,7 +56,7 @@ interface Shape {
      * @property width The width of the ellipse.
      * @property height The height of the ellipse.
      */
-    data class Ellipse(override val width: Double, override val height: Double) : Shape {
+    data class Ellipse(override val width: Double, override val height: Double) : CetzShape {
 
         override fun create(center: Point<Double>, name: String?, fill: Paint?, stroke: Stroke?): String = buildString {
             append("circle(")
@@ -75,7 +75,7 @@ interface Shape {
      * @property width The width of the rectangle.
      * @property height The height of the rectangle.
      */
-    data class Rectangle(override val width: Double, override val height: Double) : Shape {
+    data class Rectangle(override val width: Double, override val height: Double) : CetzShape {
 
         override fun create(center: Point<Double>, name: String?, fill: Paint?, stroke: Stroke?): String = buildString {
             append("rect(")
@@ -103,7 +103,7 @@ interface Shape {
         val angle: Angle? = null,
         val innerRadius: Double? = null,
         val showInner: Boolean = false
-    ) : Shape {
+    ) : CetzShape {
 
         override val width: Double = 2 * radius
         override val height: Double = 2 * radius
@@ -132,13 +132,13 @@ interface Shape {
          * A circle.
          * @param radius The radius of the circle.
          */
-        fun Circle(radius: Double): Shape = Ellipse(radius, radius)
+        fun Circle(radius: Double): CetzShape = Ellipse(radius, radius)
 
         /**
          * A square.
          * @param size The size of the square.
          */
-        fun Square(size: Double): Shape = Rectangle(size, size)
+        fun Square(size: Double): CetzShape = Rectangle(size, size)
 
 
     }
