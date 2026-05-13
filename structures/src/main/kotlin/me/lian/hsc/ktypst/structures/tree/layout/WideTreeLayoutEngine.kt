@@ -25,7 +25,7 @@ object WideTreeLayoutEngine : TreeLayoutEngine {
             return Subtree(
                 TreeNodeLayout(
                     model = model.model,
-                    x = 0.0,
+                    x = offset + model.width / 2.0,
                     y = 0.0,
                     width = model.width,
                     height = model.height,
@@ -37,15 +37,15 @@ object WideTreeLayoutEngine : TreeLayoutEngine {
             )
         }
 
+        // find widths of the subtrees and this width
         val childWidths = model.children.map { measureSubtree(it) }
-
-        val childrenWidth =
-            childWidths.sum() + model.siblingSpace * (childWidths.size - 1)
-
+        val childrenWidth = childWidths.sum() + model.siblingSpace * (childWidths.size - 1)
         val width = maxOf(model.width, childrenWidth)
 
+        // find start offset of the children
         var childOffset = offset + (width - childrenWidth) / 2.0
 
+        // layout subtrees of all children
         val positionedChildren = mutableListOf<TreeNodeLayout<T>>()
 
         for ((child, childWidth) in model.children.zip(childWidths)) {
@@ -55,7 +55,10 @@ object WideTreeLayoutEngine : TreeLayoutEngine {
             childOffset += childWidth + model.siblingSpace
         }
 
-        val rootX = offset + width / 2.0
+        // find x position of the root node
+        val leftMost = positionedChildren.minOf { it.x - it.width / 2 }
+        val rightMost = positionedChildren.maxOf { it.x + it.width / 2 }
+        val rootX = (leftMost + rightMost) / 2
 
         return Subtree(
             TreeNodeLayout(
