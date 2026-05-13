@@ -27,20 +27,29 @@ interface CetzShape {
     val height: Double
 
     /**
+     * The filling of the shape.
+     */
+    val fill: Paint?
+
+    /**
+     * The stroke of the shape.
+     */
+    val stroke: Stroke?
+
+    /**
      * Creates the shape in Typst.
      *
      * @param center The center point of the shape.
      * @param name The name of the shape.
-     * @param fill The paint to fill the shape with.
-     * @param stroke The stroke to use for the shape.
      * @return The shape in Typst.
      */
-    fun create(
-        center: Point<Double>,
-        name: String? = null,
-        fill: Paint? = null,
-        stroke: Stroke? = null,
-    ): String
+    fun create(center: Point<Double>, name: String? = null): String
+
+    /**
+     * Creates a new shape that has the same properties as this shape but will not be displayed
+     * (i.e., has a transparent fill and stroke).
+     */
+    fun transparent(): CetzShape
 
     /**
      * Appends the name, fill, and stroke to the string builder if they are not null.
@@ -56,9 +65,12 @@ interface CetzShape {
      * @property width The width of the ellipse.
      * @property height The height of the ellipse.
      */
-    data class Ellipse(override val width: Double, override val height: Double) : CetzShape {
+    data class Ellipse(
+        override val width: Double, override val height: Double,
+        override val fill: Paint? = null, override val stroke: Stroke? = null
+    ) : CetzShape {
 
-        override fun create(center: Point<Double>, name: String?, fill: Paint?, stroke: Stroke?): String = buildString {
+        override fun create(center: Point<Double>, name: String?): String = buildString {
             append("circle(")
             append("${center.toTypst("em")}, ")
             append("radius: (${width / 2}em, ${height / 2}em), ")
@@ -68,6 +80,8 @@ interface CetzShape {
             append(")")
         }
 
+        override fun transparent() = copy(fill = Paint.None, stroke = Stroke.None)
+
     }
 
     /**
@@ -75,9 +89,12 @@ interface CetzShape {
      * @property width The width of the rectangle.
      * @property height The height of the rectangle.
      */
-    data class Rectangle(override val width: Double, override val height: Double) : CetzShape {
+    data class Rectangle(
+        override val width: Double, override val height: Double,
+        override val fill: Paint? = null, override val stroke: Stroke? = null
+    ) : CetzShape {
 
-        override fun create(center: Point<Double>, name: String?, fill: Paint?, stroke: Stroke?): String = buildString {
+        override fun create(center: Point<Double>, name: String?): String = buildString {
             append("rect(")
             append("(${center.x - width / 2}em, ${center.y - height / 2}em), ")
             append("(rel: (${width}em, ${height}em)), ")
@@ -86,6 +103,8 @@ interface CetzShape {
 
             append(")")
         }
+
+        override fun transparent() = copy(fill = Paint.None, stroke = Stroke.None)
 
     }
 
@@ -102,13 +121,14 @@ interface CetzShape {
         val radius: Double,
         val angle: Angle? = null,
         val innerRadius: Double? = null,
-        val showInner: Boolean = false
+        val showInner: Boolean = false,
+        override val fill: Paint? = null, override val stroke: Stroke? = null
     ) : CetzShape {
 
         override val width: Double = 2 * radius
         override val height: Double = 2 * radius
 
-        override fun create(center: Point<Double>, name: String?, fill: Paint?, stroke: Stroke?): String = buildString {
+        override fun create(center: Point<Double>, name: String?): String = buildString {
             append("n-star(")
             append("${center.toTypst("em")}, ")
             append("$points, ")
@@ -123,6 +143,8 @@ interface CetzShape {
             append(")")
         }
 
+        override fun transparent() = copy(fill = Paint.None, stroke = Stroke.None)
+
     }
 
     @Suppress("FunctionName")
@@ -132,13 +154,15 @@ interface CetzShape {
          * A circle.
          * @param radius The radius of the circle.
          */
-        fun Circle(radius: Double): CetzShape = Ellipse(radius, radius)
+        fun Circle(radius: Double, fill: Paint? = null, stroke: Stroke? = null): CetzShape =
+            Ellipse(radius, radius, fill, stroke)
 
         /**
          * A square.
          * @param size The size of the square.
          */
-        fun Square(size: Double): CetzShape = Rectangle(size, size)
+        fun Square(size: Double, fill: Paint? = null, stroke: Stroke? = null): CetzShape =
+            Rectangle(size, size, fill, stroke)
 
 
     }

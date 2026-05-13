@@ -22,14 +22,16 @@ interface SimpleTreeRenderEngine {
 object EmptyContentAsKeyRenderEngine : SimpleTreeRenderEngine {
 
     override fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): String = buildString {
-        appendLine("""
+        appendLine(
+            """
             #set page(width: auto, height: auto, fill: none, margin: 1em)
 
             #import "@preview/cetz:0.5.1"
 
             #cetz.canvas({
             import cetz.draw: *
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         render(node)
 
@@ -37,14 +39,8 @@ object EmptyContentAsKeyRenderEngine : SimpleTreeRenderEngine {
     }
 
     private fun StringBuilder.render(node: TreeNodeLayout<SimpleTreeNodeModel>) {
-        appendLine(
-            node.model.cetzShape.create(
-                Point(node.x, node.y),
-                name = node.model.key,
-                fill = node.model.fill,
-                stroke = node.model.nodeStroke,
-            )
-        )
+        appendLine(node.model.cetzShape.create(Point(node.x, node.y), node.model.key))
+
         appendLine(
             "content(\"${node.model.key}\", " +
                 "text(fill: ${node.model.contentFill.value})[${node.model.content ?: node.model.key}])"
@@ -52,7 +48,7 @@ object EmptyContentAsKeyRenderEngine : SimpleTreeRenderEngine {
 
         node.children.forEach {
             render(it)
-            appendLine(it.model.connectionStroke.create("\"${node.model.key}\"", "\"${it.model.key}\""))
+            appendLine(it.model.stroke.create("\"${node.model.key}\"", "\"${it.model.key}\""))
         }
     }
 
@@ -64,14 +60,16 @@ object EmptyContentAsKeyRenderEngine : SimpleTreeRenderEngine {
 object EmptyContentAsEmptyRenderEngine : SimpleTreeRenderEngine {
 
     override fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): String = buildString {
-        appendLine("""
+        appendLine(
+            """
             #set page(width: auto, height: auto, fill: none, margin: 1em)
 
             #import "@preview/cetz:0.5.1"
 
             #cetz.canvas({
             import cetz.draw: *
-        """.trimIndent())
+        """.trimIndent()
+        )
 
         render(node)
 
@@ -79,14 +77,8 @@ object EmptyContentAsEmptyRenderEngine : SimpleTreeRenderEngine {
     }
 
     private fun StringBuilder.render(node: TreeNodeLayout<SimpleTreeNodeModel>) {
-        appendLine(
-            node.model.cetzShape.create(
-                Point(node.x, node.y),
-                name = node.model.key,
-                fill = node.model.fill,
-                stroke = node.model.nodeStroke,
-            )
-        )
+        appendLine(node.model.cetzShape.create(Point(node.x, node.y), node.model.key))
+
         if (node.model.content != null) {
             appendLine(
                 "content(\"${node.model.key}\", " +
@@ -96,7 +88,7 @@ object EmptyContentAsEmptyRenderEngine : SimpleTreeRenderEngine {
 
         node.children.forEach {
             render(it)
-            appendLine(it.model.connectionStroke.create("\"${node.model.key}\"", "\"${it.model.key}\""))
+            appendLine(it.model.stroke.create("\"${node.model.key}\"", "\"${it.model.key}\""))
         }
     }
 

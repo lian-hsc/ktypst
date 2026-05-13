@@ -8,14 +8,13 @@ import lian.hsc.ktypst.stdlib.visualize.paint.Paint
 import me.lian.hsc.ktypst.structures.StructureDslMarker
 import me.lian.hsc.ktypst.structures.tree.layout.PackedTreeLayoutEngine
 import me.lian.hsc.ktypst.structures.tree.layout.TreeLayoutEngine
-import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeHolder
 import me.lian.hsc.ktypst.structures.util.NotNullable
 
 /**
  * DSL for defining leave nodes of a game tree.
  */
 @StructureDslMarker
-class GameTreeLeafDsl {
+class GameTreeLeafDsl(parent: GameTreeDsl) {
 
     /**
      * The key of the tree node.
@@ -36,14 +35,13 @@ class GameTreeLeafDsl {
     private var _key: String? = null
     private var _value: String? = null
 
-    internal var style: TreeNodeStyleDsl? = null
+    internal var style: TreeNodeStyleDsl = TreeNodeStyleDsl(parent.style)
 
     /**
      * Defines the style of the tree node.
      * Can only be called once per node.
      */
     fun style(block: TreeNodeStyleDsl.() -> Unit) {
-        check(style == null) { "Style can only be defined once per node." }
         style = TreeNodeStyleDsl().apply(block)
     }
 
@@ -53,27 +51,25 @@ class GameTreeLeafDsl {
  * DSL for defining game trees.
  */
 @StructureDslMarker
-class GameTreeDsl : TreeDsl<GameTreeDsl>() {
+class GameTreeDsl(parent: GameTreeDsl?) : TreeDsl<GameTreeDsl>(parent) {
 
-    override fun createDsl() = GameTreeDsl()
+    override fun createDsl() = GameTreeDsl(this)
 
     /**
      * Add a leaf node to the tree.
      */
     fun leaf(block: GameTreeLeafDsl.() -> Unit) {
-        val leaf = GameTreeLeafDsl().apply(block)
-        children += GameTreeDsl().apply {
+        val leaf = GameTreeLeafDsl(this).apply(block)
+        children += GameTreeDsl(this).apply {
             key = leaf.key
             content = leaf.content
-            style = (leaf.style ?: TreeNodeStyleDsl()).also { it.levelSpace = 0.0 }
+            style = leaf.style
 
             child {
                 style {
-                    cetzShape = CetzShape.Circle(2.0)
-                    fill = Paint.None
+                    shape = CetzShape.Circle(2.0, fill = Paint.None, stroke = Stroke.None)
                     contentFill = Color.Named.Black
-                    nodeStroke = Stroke.None
-                    connectionStroke = CetzLine.None
+                    stroke = CetzLine.None
                 }
 
                 key = leaf.value
@@ -95,5 +91,5 @@ fun gameTree(
     layoutEngine: TreeLayoutEngine = PackedTreeLayoutEngine,
     renderEngine: SimpleTreeRenderEngine = EmptyContentAsKeyRenderEngine,
     block: GameTreeDsl.() -> Unit
-) = GameTreeDsl().apply(block).build(layoutEngine, renderEngine)
+) = GameTreeDsl(null).apply { applyDefaultStyle() }.apply(block).build(layoutEngine, renderEngine)
 

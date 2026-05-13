@@ -9,4 +9,8 @@ data class TreeNodeLayout<T>(
     val siblingSpace: Double,
     val levelSpace: Double,
     val children: List<TreeNodeLayout<T>>,
-)
+) {
+    fun key() {
+        TODO("Not yet implemented")
+    }
+}
