@@ -1,4 +1,4 @@
-package me.lian.hsc.ktypst.structures.tree
+package me.lian.hsc.ktypst.structures.tree.simple
 
 import lian.hsc.ktypst.stdlib.cetz.CetzLine
 import lian.hsc.ktypst.stdlib.cetz.CetzShape
@@ -6,23 +6,11 @@ import lian.hsc.ktypst.stdlib.visualize.Stroke
 import lian.hsc.ktypst.stdlib.visualize.paint.Color
 import lian.hsc.ktypst.stdlib.visualize.paint.Paint
 import me.lian.hsc.ktypst.structures.StructureDslMarker
+import me.lian.hsc.ktypst.structures.tree.layout.PackedTreeLayoutEngine
+import me.lian.hsc.ktypst.structures.tree.layout.TreeLayoutEngine
+import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeHolder
 import me.lian.hsc.ktypst.structures.util.NotNullable
 
-/**
- * A model of a tree node.
- */
-data class TreeNodeModel(
-    val key: String,
-    val content: String?,
-    val cetzShape: CetzShape,
-    val fill: Paint,
-    val contentFill: Paint,
-    val nodeStroke: Stroke,
-    val connectionStroke: CetzLine,
-    val siblingSpace: Double,
-    val levelSpace: Double,
-    val children: List<TreeNodeModel>
-)
 
 /**
  * DSL for defining the style of a tree node.
@@ -78,7 +66,7 @@ class TreeDsl {
         children += TreeDsl().apply(block)
     }
 
-    internal fun toModel(
+    internal fun toHolder(
         cetzShape: CetzShape = CetzShape.Circle(2.0),
         fill: Paint = Color.Named.White,
         contentFill: Paint = Color.Named.Black,
@@ -86,7 +74,7 @@ class TreeDsl {
         connectionStroke: CetzLine = CetzLine(),
         siblingSpace: Double = 1.0,
         levelSpace: Double = 2.0,
-    ): TreeNodeModel {
+    ): TreeNodeHolder<SimpleTreeNodeModel> {
         val newShape = style?.cetzShape ?: cetzShape
         val newFill = style?.fill ?: fill
         val newContentFill = style?.contentFill ?: contentFill
@@ -95,18 +83,22 @@ class TreeDsl {
         val newSiblingSpace = style?.siblingSpace ?: siblingSpace
         val newLevelSpace = style?.levelSpace ?: levelSpace
 
-        return TreeNodeModel(
-            key = key,
-            content = content,
-            cetzShape = newShape,
-            fill = newFill,
-            contentFill = newContentFill,
-            nodeStroke = newNodeStroke,
-            connectionStroke = newConnectionStroke,
+        return TreeNodeHolder(
+            SimpleTreeNodeModel(
+                key = key,
+                content = content,
+                cetzShape = newShape,
+                fill = newFill,
+                contentFill = newContentFill,
+                nodeStroke = newNodeStroke,
+                connectionStroke = newConnectionStroke,
+            ),
+            width = newShape.width,
+            height = newShape.height,
             siblingSpace = newSiblingSpace,
             levelSpace = newLevelSpace,
             children = children.map {
-                it.toModel(
+                it.toHolder(
                     cetzShape = newShape,
                     fill = newFill,
                     contentFill = newContentFill,
@@ -119,9 +111,9 @@ class TreeDsl {
         )
     }
 
-    internal fun build(layoutEngine: TreeLayoutEngine, renderEngine: TreeRenderEngine): String {
-        val model = toModel()
-        val layout = layoutEngine.layout(model)
+    internal fun build(layoutEngine: TreeLayoutEngine, renderEngine: SimpleTreeRenderEngine): String {
+        val holder = toHolder()
+        val layout = layoutEngine.layout(holder)
         return renderEngine.render(layout)
     }
 
@@ -129,7 +121,7 @@ class TreeDsl {
 
 fun tree(
     layoutEngine: TreeLayoutEngine = PackedTreeLayoutEngine,
-    renderEngine: TreeRenderEngine = EmptyContentAsKeyRenderEngine,
+    renderEngine: SimpleTreeRenderEngine = EmptyContentAsKeyRenderEngine,
     block: TreeDsl.() -> Unit
 ) = TreeDsl().apply(block).build(layoutEngine, renderEngine)
 

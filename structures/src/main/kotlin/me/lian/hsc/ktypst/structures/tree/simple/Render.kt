@@ -1,25 +1,27 @@
-package me.lian.hsc.ktypst.structures.tree
+package me.lian.hsc.ktypst.structures.tree.simple
 
 import lian.hsc.ktypst.stdlib.visualize.Point
+import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeLayout
 
 /**
- * A tree render engine that gets the root node of a tree as a [TreeNodeLayout] and renders it as Typst code.
+ * A tree render engine that gets the root node of a simple tree as a [TreeNodeLayout] and renders it as Typst code.
  */
-interface TreeRenderEngine {
+interface SimpleTreeRenderEngine {
 
     /**
      * Renders the given [node] and all its children as Typst code.
      */
-    fun render(node: TreeNodeLayout): String
+    fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): String
 
 }
+
 
 /**
  * A render engine that renders nodes with no content as nodes with their key as content.
  */
-object EmptyContentAsKeyRenderEngine : TreeRenderEngine {
+object EmptyContentAsKeyRenderEngine : SimpleTreeRenderEngine {
 
-    override fun render(node: TreeNodeLayout): String = buildString {
+    override fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): String = buildString {
         appendLine("""
             #set page(width: auto, height: auto, fill: none, margin: 1em)
 
@@ -34,7 +36,7 @@ object EmptyContentAsKeyRenderEngine : TreeRenderEngine {
         appendLine("})")
     }
 
-    private fun StringBuilder.render(node: TreeNodeLayout) {
+    private fun StringBuilder.render(node: TreeNodeLayout<SimpleTreeNodeModel>) {
         appendLine(
             node.model.cetzShape.create(
                 Point(node.x, node.y),
@@ -59,11 +61,24 @@ object EmptyContentAsKeyRenderEngine : TreeRenderEngine {
 /**
  * A render engine that renders nodes with no content as empty nodes.
  */
-object EmptyContentAsEmptyRenderEngine : TreeRenderEngine {
+object EmptyContentAsEmptyRenderEngine : SimpleTreeRenderEngine {
 
-    override fun render(node: TreeNodeLayout): String = buildString { render(node) }
+    override fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): String = buildString {
+        appendLine("""
+            #set page(width: auto, height: auto, fill: none, margin: 1em)
 
-    private fun StringBuilder.render(node: TreeNodeLayout) {
+            #import "@preview/cetz:0.5.1"
+
+            #cetz.canvas({
+            import cetz.draw: *
+        """.trimIndent())
+
+        render(node)
+
+        appendLine("})")
+    }
+
+    private fun StringBuilder.render(node: TreeNodeLayout<SimpleTreeNodeModel>) {
         appendLine(
             node.model.cetzShape.create(
                 Point(node.x, node.y),
