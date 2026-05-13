@@ -10,6 +10,7 @@ import me.lian.hsc.ktypst.structures.tree.layout.PackedTreeLayoutEngine
 import me.lian.hsc.ktypst.structures.tree.layout.TreeLayoutEngine
 import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeHolder
 import me.lian.hsc.ktypst.structures.util.NotNullable
+import java.net.SocketTimeoutException
 
 
 /**
@@ -33,7 +34,7 @@ class TreeNodeStyleDsl {
  * DSL for defining a tree structure.
  */
 @StructureDslMarker
-class TreeDsl {
+sealed class TreeDsl<Type : TreeDsl<Type>> {
 
     /**
      * The key of the tree node.
@@ -47,8 +48,8 @@ class TreeDsl {
     var content: String? = null
 
     private var _key: String? = null
-    private var style: TreeNodeStyleDsl? = null
-    private val children: MutableList<TreeDsl> = mutableListOf()
+    protected var style: TreeNodeStyleDsl? = null
+    protected val children: MutableList<Type> = mutableListOf()
 
     /**
      * Defines the style of the tree node.
@@ -62,9 +63,11 @@ class TreeDsl {
     /**
      * Add a child node to the tree.
      */
-    fun child(block: TreeDsl.() -> Unit) {
-        children += TreeDsl().apply(block)
+    fun child(block: Type.() -> Unit) {
+        children += createDsl().apply(block)
     }
+
+    protected abstract fun createDsl(): Type
 
     internal fun toHolder(
         cetzShape: CetzShape = CetzShape.Circle(2.0),
@@ -119,9 +122,15 @@ class TreeDsl {
 
 }
 
+class SimpleTreeDsl : TreeDsl<SimpleTreeDsl>() {
+
+    override fun createDsl() = SimpleTreeDsl()
+
+}
+
 fun tree(
     layoutEngine: TreeLayoutEngine = PackedTreeLayoutEngine,
     renderEngine: SimpleTreeRenderEngine = EmptyContentAsKeyRenderEngine,
-    block: TreeDsl.() -> Unit
-) = TreeDsl().apply(block).build(layoutEngine, renderEngine)
+    block: SimpleTreeDsl.() -> Unit
+) = SimpleTreeDsl().apply(block).build(layoutEngine, renderEngine)
 
