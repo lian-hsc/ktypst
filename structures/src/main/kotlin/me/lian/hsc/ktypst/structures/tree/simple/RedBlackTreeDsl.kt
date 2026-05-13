@@ -23,11 +23,21 @@ class RedBlackTreeDsl(parent: RedBlackTreeDsl?) : TreeDsl<RedBlackTreeDsl>(paren
         block()
     }
 
+    fun red(key: String, block: RedBlackTreeDsl.() -> Unit = { }): Unit = red {
+        this.key = key
+        block()
+    }
+
     fun black(block: RedBlackTreeDsl.() -> Unit): Unit = child {
         style {
             stroke = CetzLine(Stroke(Color.Named.Black))
         }
 
+        block()
+    }
+
+    fun black(key: String, block: RedBlackTreeDsl.() -> Unit = { }): Unit = black {
+        this.key = key
         block()
     }
 

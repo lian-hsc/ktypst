@@ -68,7 +68,7 @@ object EmptyContentAsEmptyRenderEngine : SimpleTreeRenderEngine {
 
             #cetz.canvas({
             import cetz.draw: *
-        """.trimIndent()
+            """.trimIndent()
         )
 
         render(node)

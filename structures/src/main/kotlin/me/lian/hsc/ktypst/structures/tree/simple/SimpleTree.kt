@@ -69,6 +69,13 @@ sealed class TreeDsl<Type : TreeDsl<Type>>(parent: Type?) {
     }
 
     /**
+     * Add a child node to the tree.
+     */
+    fun child(key: String, block: Type.() -> Unit = { }) {
+        children += createDsl().apply { this.key = key }.apply(block)
+    }
+
+    /**
      * Adds a missing child (i.e., a child that is not rendered).
      */
     fun missingChild(): Unit = child {

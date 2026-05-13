@@ -18,8 +18,8 @@ data class CetzLine(
     /**
      * Creates a call to the cetz line function.
      */
-    fun create(start: String, end: String, name: String? = null): String = buildString {
-        append("line($start, $end, stroke: ${stroke.value}, mark: (")
+    fun create(vararg points: String, function: String = "line", name: String? = null): String = buildString {
+        append("$function(${points.joinToString(", ")}, stroke: ${stroke.value}, mark: (")
 
         if (startMark != null) append("start: ${startMark.value}, ")
         if (endMark != null) append("end: ${endMark.value}")
