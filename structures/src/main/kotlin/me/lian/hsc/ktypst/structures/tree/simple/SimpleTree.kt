@@ -69,9 +69,9 @@ sealed class TreeDsl<Type : TreeDsl<Type>>(parent: Type?) {
     }
 
     /**
-     * Adds a missing child (i.e., a child that is not rendered)
+     * Adds a missing child (i.e., a child that is not rendered).
      */
-    fun missingChild() = child {
+    fun missingChild(): Unit = child {
         style {
             shape = shape.transparent()
             contentFill = Paint.None
@@ -85,7 +85,7 @@ sealed class TreeDsl<Type : TreeDsl<Type>>(parent: Type?) {
 
     protected abstract fun createDsl(): Type
 
-    internal fun applyDefaultStyle() = style {
+    internal fun applyDefaultStyle(): Unit = style {
         shape = CetzShape.Circle(2.0)
         contentFill = Color.Named.Black
         stroke = CetzLine()
@@ -95,7 +95,7 @@ sealed class TreeDsl<Type : TreeDsl<Type>>(parent: Type?) {
 
     internal fun toHolder(): TreeNodeHolder<SimpleTreeNodeModel> {
         return TreeNodeHolder(
-            SimpleTreeNodeModel(
+            model = SimpleTreeNodeModel(
                 key = key,
                 content = content,
                 cetzShape = style.shape,

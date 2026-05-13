@@ -51,23 +51,44 @@ object TheBTreeRenderEngine : BTreeRenderEngine {
         appendLine("group({")
         val left = node.x - node.width / 2
         for ((index, child) in node.children.withIndex()) {
-            val pointerX = left + (node.model.content.width + node.model.pointer.width) * index + node.model.pointer.width / 2
-            appendLine(node.model.pointer.create(
-                Point(pointerX, node.y),
-                name = "${node.model.name}>p$index"
-            ))
+            val pointerX =
+                left +
+                    node.model.content.width * index +
+                    node.model.pointer.width * index +
+                    node.model.pointer.width / 2
+
+            appendLine(
+                node.model.pointer.create(
+                    Point(pointerX, node.y),
+                    name = "${node.model.name}>p$index"
+                )
+            )
             render(child)
-            appendLine(child.model.stroke.create("\"${node.model.name}>p$index.south\"", "\"${child.model.name}.north\""))
+            appendLine(
+                child.model.stroke.create(
+                    "\"${node.model.name}>p$index.south\"",
+                    "\"${child.model.name}.north\""
+                )
+            )
         }
 
         for ((index, key) in node.model.keys.withIndex()) {
-            val centerX = left + node.model.content.width * index + node.model.pointer.width * (index + 1) + node.model.content.width / 2
-            appendLine(node.model.content.create(
-                Point(centerX, node.y),
-                name = "${node.model.name}>$key"
-            ))
-            appendLine("content(\"${node.model.name}>$key\", " +
-                "text(fill: ${node.model.contentFill.value})[$key])")
+            val centerX =
+                left +
+                    node.model.content.width * index +
+                    node.model.pointer.width * (index + 1) +
+                    node.model.content.width / 2
+
+            appendLine(
+                node.model.content.create(
+                    Point(centerX, node.y),
+                    name = "${node.model.name}>$key"
+                )
+            )
+            appendLine(
+                "content(\"${node.model.name}>$key\", " +
+                    "text(fill: ${node.model.contentFill.value})[$key])"
+            )
         }
         appendLine("}, name: \"${node.model.name}\")")
     }
@@ -78,12 +99,16 @@ object TheBTreeRenderEngine : BTreeRenderEngine {
         appendLine("group({")
         for ((index, key) in node.model.keys.withIndex()) {
             val centerX = left + node.model.content.width * index + node.model.content.width / 2
-            appendLine(node.model.content.create(
-                Point(centerX, node.y),
-                name = "${node.model.name}>$key"
-            ))
-            appendLine("content(\"${node.model.name}>$key\", " +
-                "text(fill: ${node.model.contentFill.value})[$key])")
+            appendLine(
+                node.model.content.create(
+                    Point(centerX, node.y),
+                    name = "${node.model.name}>$key"
+                )
+            )
+            appendLine(
+                "content(\"${node.model.name}>$key\", " +
+                    "text(fill: ${node.model.contentFill.value})[$key])"
+            )
         }
         appendLine("}, name: \"${node.model.name}\")")
     }

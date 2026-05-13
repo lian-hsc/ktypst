@@ -64,6 +64,8 @@ interface CetzShape {
      * A ellipse.
      * @property width The width of the ellipse.
      * @property height The height of the ellipse.
+     * @property fill The filling of the ellipse.
+     * @property stroke The stroke of the ellipse.
      */
     data class Ellipse(
         override val width: Double, override val height: Double,
@@ -88,6 +90,8 @@ interface CetzShape {
      * A rectangle.
      * @property width The width of the rectangle.
      * @property height The height of the rectangle.
+     * @property fill The filling of the rectangle.
+     * @property stroke The stroke of the rectangle.
      */
     data class Rectangle(
         override val width: Double, override val height: Double,
@@ -115,6 +119,8 @@ interface CetzShape {
      * @property angle The angel to rotate the star around its origin.
      * @property innerRadius The radius of the star's inner points.
      * @property showInner Whether to show lines connecting the inner points of the star.
+     * @property fill The filling of the star.
+     * @property stroke The stroke of the star.
      */
     data class Star(
         val points: Int,
@@ -153,6 +159,8 @@ interface CetzShape {
         /**
          * A circle.
          * @param radius The radius of the circle.
+         * @param fill The filling of the circle.
+         * @param stroke The stroke of the circle.
          */
         fun Circle(radius: Double, fill: Paint? = null, stroke: Stroke? = null): CetzShape =
             Ellipse(radius, radius, fill, stroke)
@@ -160,6 +168,8 @@ interface CetzShape {
         /**
          * A square.
          * @param size The size of the square.
+         * @param fill The filling of the square.
+         * @param stroke The stroke of the square.
          */
         fun Square(size: Double, fill: Paint? = null, stroke: Stroke? = null): CetzShape =
             Rectangle(size, size, fill, stroke)

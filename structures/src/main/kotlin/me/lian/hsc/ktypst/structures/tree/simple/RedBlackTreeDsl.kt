@@ -15,7 +15,7 @@ class RedBlackTreeDsl(parent: RedBlackTreeDsl?) : TreeDsl<RedBlackTreeDsl>(paren
 
     override fun createDsl() = RedBlackTreeDsl(this)
 
-    fun red(block: RedBlackTreeDsl.() -> Unit) = child {
+    fun red(block: RedBlackTreeDsl.() -> Unit): Unit = child {
         style {
             stroke = CetzLine(Stroke(Color.Named.Red))
         }
@@ -23,7 +23,7 @@ class RedBlackTreeDsl(parent: RedBlackTreeDsl?) : TreeDsl<RedBlackTreeDsl>(paren
         block()
     }
 
-    fun black(block: RedBlackTreeDsl.() -> Unit) = child {
+    fun black(block: RedBlackTreeDsl.() -> Unit): Unit = child {
         style {
             stroke = CetzLine(Stroke(Color.Named.Black))
         }

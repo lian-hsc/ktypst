@@ -61,14 +61,14 @@ object WideTreeLayoutEngine : TreeLayoutEngine {
         val rootX = (leftMost + rightMost) / 2
 
         return Subtree(
-            TreeNodeLayout(
-                model.model,
-                rootX, 0.0,
-                model.width, model.height,
-                model.siblingSpace, model.levelSpace,
-                positionedChildren
+            node = TreeNodeLayout(
+                model = model.model,
+                x = rootX, y = 0.0,
+                width = model.width, height = model.height,
+                siblingSpace = model.siblingSpace, levelSpace = model.levelSpace,
+                children = positionedChildren
             ),
-            width
+            width = width
         )
     }
 

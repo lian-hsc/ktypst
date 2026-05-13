@@ -80,7 +80,7 @@ class GameTreeDsl(parent: GameTreeDsl?) : TreeDsl<GameTreeDsl>(parent) {
     /**
      * Adds a leaf with the given key and value to the tree.
      */
-    fun leaf(key: String, value: String) = leaf {
+    fun leaf(key: String, value: String): Unit = leaf {
         this.key = key
         this.value = value
     }

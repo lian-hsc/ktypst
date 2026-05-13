@@ -12,7 +12,7 @@ import me.lian.hsc.ktypst.structures.util.GetOrDelegate
 
 
 /**
- * DSL for defining the style of a b tree node
+ * DSL for defining the style of a b tree node.
  */
 @StructureDslMarker
 class BTreeNodeStyleDsl(parent: BTreeNodeStyleDsl? = null) {
@@ -69,7 +69,7 @@ class BTreeDsl(parent: BTreeDsl? = null) {
         children += BTreeDsl(this).apply(block)
     }
 
-    internal fun applyDefaultStyle() = style {
+    internal fun applyDefaultStyle(): Unit = style {
         pointer = CetzShape.Rectangle(.5, 2.0, fill = Color.Named.Gray)
         content = CetzShape.Square(2.0, fill = Color.Named.White)
         contentFill = Color.Named.Black
@@ -84,7 +84,7 @@ class BTreeDsl(parent: BTreeDsl? = null) {
         }
 
         return TreeNodeHolder(
-            BTreeNodeModel(
+            model = BTreeNodeModel(
                 keys = keys,
                 pointer = style.pointer,
                 content = style.content,

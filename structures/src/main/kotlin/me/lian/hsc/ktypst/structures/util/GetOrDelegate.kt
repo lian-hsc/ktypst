@@ -15,7 +15,11 @@ class GetOrDelegate<T>(val actual: KMutableProperty<T?>, val delegate: KProperty
         val actualValue = actual.getter.also { if (!it.isAccessible) it.isAccessible = true }.call()
         if (actualValue != null) return actualValue
 
-        return delegate?.getter?.also { if (!it.isAccessible) it.isAccessible = true }?.call() ?: error("Can not fetch value from null delegate.")
+        return delegate
+            ?.getter
+            ?.also { if (!it.isAccessible) it.isAccessible = true }
+            ?.call()
+            ?: error("Can not fetch value from null delegate.")
     }
 
 }

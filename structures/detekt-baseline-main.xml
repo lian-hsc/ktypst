@@ -2,13 +2,23 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>LongParameterList:DSL.kt:TreeDsl$internal fun toModel: TreeNodeModel</ID>
-    <ID>NamedArguments:Layout.kt:PackedTreeLayoutEngine$TreeNodeLayout(model, 0.0, 0.0, emptyList())</ID>
-    <ID>NamedArguments:Layout.kt:PackedTreeLayoutEngine$TreeNodeLayout(model, rootX, 0.0, positionedChildren)</ID>
-    <ID>NamedArguments:Layout.kt:WideTreeLayoutEngine$TreeNodeLayout( model, offset + model.shape.width / 2.0, 0.0, emptyList() )</ID>
-    <ID>NamedArguments:Layout.kt:WideTreeLayoutEngine$TreeNodeLayout(model, rootX, 0.0, positionedChildren)</ID>
-    <ID>NamedArguments:Render.kt:EmptyContentAsEmptyRenderEngine$create( Point(node.x, node.y), name = node.model.key, fill = node.model.fill, stroke = node.model.nodeStroke, )</ID>
-    <ID>NamedArguments:Render.kt:EmptyContentAsKeyRenderEngine$create( Point(node.x, node.y), name = node.model.key, fill = node.model.fill, stroke = node.model.nodeStroke, )</ID>
-    <ID>VarCouldBeVal:DSL.kt:TreeDsl$private var _key: String? = null</ID>
+    <ID>LongMethod:PackedTreeLayoutEngine.kt:PackedTreeLayoutEngine$private fun &lt;T&gt; layoutSubtree: Subtree&lt;T&gt;</ID>
+    <ID>MagicNumber:BTree.kt:BTreeDsl$.5</ID>
+    <ID>PropertyUsedBeforeDeclaration:BTree.kt:BTreeDsl$style</ID>
+    <ID>PropertyUsedBeforeDeclaration:SimpleTree.kt:TreeDsl$style</ID>
+    <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _content: CetzShape? = null</ID>
+    <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _contentFill: Paint? = null</ID>
+    <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _levelSpace: Double? = null</ID>
+    <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _pointer: CetzShape? = null</ID>
+    <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _siblingSpace: Double? = null</ID>
+    <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _stroke: CetzLine? = null</ID>
+    <ID>VarCouldBeVal:GameTree.kt:GameTreeLeafDsl$private var _key: String? = null</ID>
+    <ID>VarCouldBeVal:GameTree.kt:GameTreeLeafDsl$private var _value: String? = null</ID>
+    <ID>VarCouldBeVal:SimpleTree.kt:TreeDsl$private var _key: String? = null</ID>
+    <ID>VarCouldBeVal:SimpleTree.kt:TreeNodeStyleDsl$private var _contentFill: Paint? = null</ID>
+    <ID>VarCouldBeVal:SimpleTree.kt:TreeNodeStyleDsl$private var _levelSpace: Double? = null</ID>
+    <ID>VarCouldBeVal:SimpleTree.kt:TreeNodeStyleDsl$private var _shape: CetzShape? = null</ID>
+    <ID>VarCouldBeVal:SimpleTree.kt:TreeNodeStyleDsl$private var _siblingSpace: Double? = null</ID>
+    <ID>VarCouldBeVal:SimpleTree.kt:TreeNodeStyleDsl$private var _stroke: CetzLine? = null</ID>
   </CurrentIssues>
 </SmellBaseline>
