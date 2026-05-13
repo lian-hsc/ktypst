@@ -51,7 +51,7 @@ object PackedTreeLayoutEngine : TreeLayoutEngine {
                 for ((depth, leftX) in subtree.left) {
                     val existingRight = combinedRight[depth + 1] ?: continue
                     val overlap = existingRight + model.siblingSpace - (leftX + shift)
-                    if (overlap > shift) shift = overlap
+                    if (overlap > 0) shift += overlap
                 }
             }
 
