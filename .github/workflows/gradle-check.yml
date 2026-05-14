@@ -19,17 +19,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Discover Gradle subprojects
+      - name: Discover Gradle projects
         id: discover
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t dirs < <(find . -mindepth 2 -name build.gradle.kts -print | sed 's#^\./##' | sed 's#/build.gradle.kts$##' | sort)
+          mapfile -t dirs < <(
+            find . -name build.gradle.kts -print \
+              | sed 's#^\./##' \
+              | sed 's#^\(build\.gradle\.kts\)$#.#' \
+              | sed 's#/build.gradle.kts$##' \
+              | sort
+          )
           if [ "${#dirs[@]}" -eq 0 ]; then
             echo 'projects=[]' >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          json="$(printf '%s\n' "${dirs[@]}" | jq -R . | jq -sc 'map(":" + gsub("/"; ":"))')"
+          json="$(printf '%s\n' "${dirs[@]}" | jq -R . | jq -sc 'map(if . == "." then ":" else ":" + gsub("/"; ":") end)')"
           echo "projects=$json" >> "$GITHUB_OUTPUT"
 
   gradle-check:
@@ -56,9 +62,18 @@ jobs:
 
       - name: Set up Typst
         uses: typst-community/setup-typst@v5
+        with:
+          typst-version: 0.14.2
 
-      - name: Run check for subproject
-        run: ./gradlew --no-daemon ${{ matrix.project }}:check
+      - name: Run check for project
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ matrix.project }}" = ":" ]; then
+            ./gradlew --no-daemon :check
+          else
+            ./gradlew --no-daemon ${{ matrix.project }}:check
+          fi
 
       - name: Resolve project paths
         if: always()
@@ -67,9 +82,14 @@ jobs:
         run: |
           set -euo pipefail
           project_dir="${{ matrix.project }}"
-          project_dir="${project_dir#:}"
-          project_dir="${project_dir//:/\/}"
-          artifact_suffix="${project_dir//\//-}"
+          if [ "$project_dir" = ":" ]; then
+            project_dir="."
+            artifact_suffix="root"
+          else
+            project_dir="${project_dir#:}"
+            project_dir="${project_dir//:/\/}"
+            artifact_suffix="${project_dir//\//-}"
+          fi
           echo "project_dir=$project_dir" >> "$GITHUB_OUTPUT"
           echo "artifact_suffix=$artifact_suffix" >> "$GITHUB_OUTPUT"
 
