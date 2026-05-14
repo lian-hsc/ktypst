@@ -52,16 +52,15 @@ abstract class GraphRenderHelper : GraphRenderEngine {
               let direction = ((b.at(0) - a.at(0)), (b.at(1) - a.at(1)))
               let perpendicular = (-direction.at(1), direction.at(0))
               let nPerpendicular = vector.norm(perpendicular)
-              let curve-through = vector.add(mid, vector.scale(nPerpendicular, bend))
+              let ctrl-point = vector.add(mid, vector.scale(nPerpendicular, bend * 2))
 
-              let look-at = vector.add(mid, vector.scale(nPerpendicular, bend * 2))
-              let start-angle = vector.angle2(a, look-at)
-              let end-angle = vector.angle2(b, look-at)
+              let start-angle = vector.angle2(a, ctrl-point)
+              let end-angle = vector.angle2(b, ctrl-point)
 
               return (
                 (name: from, anchor: start-angle),
+                (name: to, anchor: end-angle),
                 curve-through,
-                (name: to, anchor: end-angle)
               )
             }
 
@@ -95,7 +94,7 @@ abstract class GraphRenderHelper : GraphRenderEngine {
         if (edge.bend != null) appendLine("get-ctx(ctx => {")
         appendLine(
             edge.line.create(
-                function = if (edge.bend != null) "bezier-through" else "line",
+                function = if (edge.bend != null) "bezier" else "line",
                 points =
                     if (edge.bend != null) arrayOf("..curve-points(ctx, \"${edge.from}\", \"${edge.to}\", ${edge.bend})")
                     else arrayOf("\"${edge.from}\"", "\"${edge.to}\""),
