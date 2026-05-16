@@ -60,6 +60,8 @@ class CommandTypstBackendTest {
     private suspend fun assertHashForFormat(format: OutputFormat, expectedHash: String) {
         val output = CommandTypstBackend.execute(commandFor(EXAMPLE_DOCUMENT, format))
 
+        print(output.stdArtifact?.content?.let { String(it) })
+
         assertEquals(TypstCompileOutput.Status.Success, output.status)
         assertNull(output.error)
         val artifact = assertNotNull(output.stdArtifact)
