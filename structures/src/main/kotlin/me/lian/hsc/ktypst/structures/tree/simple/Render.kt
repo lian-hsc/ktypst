@@ -1,6 +1,12 @@
 package me.lian.hsc.ktypst.structures.tree.simple
 
 import lian.hsc.ktypst.stdlib.visualize.Point
+import me.lian.hsc.ktypst.structures.graph.GraphNode
+import me.lian.hsc.ktypst.structures.layout.Box
+import me.lian.hsc.ktypst.structures.layout.Layout
+import me.lian.hsc.ktypst.structures.layout.LayoutPart
+import me.lian.hsc.ktypst.structures.layout.LayoutPartBuilder
+import me.lian.hsc.ktypst.structures.layout.buildLayoutPart
 import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeLayout
 
 /**
@@ -11,61 +17,21 @@ interface SimpleTreeRenderEngine {
     /**
      * Renders the given [node] and all its children as Typst code.
      */
-    fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): String
-
-}
-
-
-/**
- * A render engine that renders nodes with no content as nodes with their key as content.
- */
-object EmptyContentAsKeyRenderEngine : SimpleTreeRenderEngine {
-
-    override fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): String = buildString {
-        appendLine(
-            """
-            #set page(width: auto, height: auto, fill: none, margin: 1em)
-
-            #import "@preview/cetz:0.5.1"
-
-            #cetz.canvas({
-            import cetz.draw: *
-        """.trimIndent()
-        )
-
-        render(node)
-
-        appendLine("})")
-    }
-
-    private fun StringBuilder.render(node: TreeNodeLayout<SimpleTreeNodeModel>) {
-        appendLine(node.model.cetzShape.create(Point(node.x, node.y), node.model.key))
-
-        appendLine(
-            "content(\"${node.model.key}\", " +
-                "text(fill: ${node.model.contentFill.value})[${node.model.content ?: node.model.key}])"
-        )
-
-        node.children.forEach {
-            render(it)
-            appendLine(it.model.stroke.create("\"${node.model.key}\"", "\"${it.model.key}\""))
-        }
-    }
+    fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): LayoutPart
 
 }
 
 /**
- * A render engine that renders nodes with no content as empty nodes.
+ * An abstract render engine that handles placement.
  */
-object EmptyContentAsEmptyRenderEngine : SimpleTreeRenderEngine {
+abstract class AbstractSimpleTreeRenderEngine : SimpleTreeRenderEngine {
 
-    override fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): String = buildString {
+    abstract fun getContent(node: SimpleTreeNodeModel): String?
+
+    override fun render(node: TreeNodeLayout<SimpleTreeNodeModel>): LayoutPart = buildLayoutPart {
+        +"#import \"@preview/cetz:0.5.1\""
         appendLine(
             """
-            #set page(width: auto, height: auto, fill: none, margin: 1em)
-
-            #import "@preview/cetz:0.5.1"
-
             #cetz.canvas({
             import cetz.draw: *
             """.trimIndent()
@@ -76,14 +42,17 @@ object EmptyContentAsEmptyRenderEngine : SimpleTreeRenderEngine {
         appendLine("})")
     }
 
-    private fun StringBuilder.render(node: TreeNodeLayout<SimpleTreeNodeModel>) {
+    private fun LayoutPartBuilder.render(node: TreeNodeLayout<SimpleTreeNodeModel>) {
+        +Box(
+            node.model.key,
+            Point(node.x, -node.y),
+            node.model.cetzShape.width, node.model.cetzShape.height
+        )
         appendLine(node.model.cetzShape.create(Point(node.x, node.y), node.model.key))
 
-        if (node.model.content != null) {
-            appendLine(
-                "content(\"${node.model.key}\", " +
-                    "text(fill: ${node.model.contentFill.value})[${node.model.content}])"
-            )
+        val content = getContent(node.model)
+        if (content != null) {
+            appendLine("content(\"${node.model.key}\", text(fill: ${node.model.contentFill.value})[$content])")
         }
 
         node.children.forEach {
@@ -91,5 +60,23 @@ object EmptyContentAsEmptyRenderEngine : SimpleTreeRenderEngine {
             appendLine(it.model.stroke.create("\"${node.model.key}\"", "\"${it.model.key}\""))
         }
     }
+
+}
+
+/**
+ * A render engine that renders nodes with no content as nodes with their key as content.
+ */
+object EmptyContentAsKeyRenderEngine : AbstractSimpleTreeRenderEngine() {
+
+    override fun getContent(node: SimpleTreeNodeModel): String = node.content ?: node.key
+
+}
+
+/**
+ * A render engine that renders nodes with no content as empty nodes.
+ */
+object EmptyContentAsEmptyRenderEngine : AbstractSimpleTreeRenderEngine() {
+
+    override fun getContent(node: SimpleTreeNodeModel): String? = node.content
 
 }

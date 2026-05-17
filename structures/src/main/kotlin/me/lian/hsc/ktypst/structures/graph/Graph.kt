@@ -6,6 +6,7 @@ import lian.hsc.ktypst.stdlib.visualize.Point
 import lian.hsc.ktypst.stdlib.visualize.paint.Color
 import lian.hsc.ktypst.stdlib.visualize.paint.Paint
 import me.lian.hsc.ktypst.structures.StructureDslMarker
+import me.lian.hsc.ktypst.structures.layout.LayoutPart
 import me.lian.hsc.ktypst.structures.util.GetOrDelegate
 import me.lian.hsc.ktypst.structures.util.NotNullable
 
@@ -16,6 +17,7 @@ class GraphDsl {
     var fillNodeContent: Paint = Color.Named.Black
     var edgeLine: CetzLine = CetzLine()
     var fillEdgeContent: Paint = Color.Named.Black
+    var relativePositionFactor: Double = 1.0
 
     private val nodes = mutableListOf<GraphNodeDsl>()
     private val edges = mutableListOf<GraphEdgeDsl>()
@@ -45,7 +47,7 @@ class GraphDsl {
         edgeLine = CetzLine(endMark = CetzLine.Mark.Single(CetzLine.Symbol.Triangle, fill = Color.Named.Black))
     }
 
-    internal fun build(renderEngine: GraphRenderEngine): String {
+    internal fun build(renderEngine: GraphRenderEngine): LayoutPart {
         val positions = nodes.associate { it.key to it.position }
         val nodes = nodes.map { it.toModel(positions) }
         val edges = edges.map { it.toModel() }
@@ -67,7 +69,7 @@ class GraphDsl {
 
 
 @StructureDslMarker
-class GraphNodeDsl(graph: GraphDsl) {
+class GraphNodeDsl(private val graph: GraphDsl) {
 
     var key by NotNullable(::_key)
     var content by NotNullable(::_content)
@@ -88,7 +90,7 @@ class GraphNodeDsl(graph: GraphDsl) {
     fun at(x: Int, y: Int): Unit = at(x.toDouble(), y.toDouble())
 
     infix fun RelativeCoordinates.of(reference: String) {
-        position = RelativePosition(Point(x, y), reference)
+        position = RelativePosition(Point(x * graph.relativePositionFactor, y * graph.relativePositionFactor), reference)
     }
 
     internal fun toModel(positions: Map<String, Position>) = GraphNode(
@@ -108,7 +110,7 @@ class GraphEdgeDsl(var from: String, var to: String, graph: GraphDsl) {
     var content: String? = null
     var contentPosition: Double? = null
     var contentAngle: ContentAngle? = null
-    var contentAnchor: Direction? = null
+    var contentAnchor: Anchor? = null
     var contentPadding: Double? = null
     var bend: Double? = null
     var fillContent: Paint by GetOrDelegate(::_fillContent, graph::fillEdgeContent)

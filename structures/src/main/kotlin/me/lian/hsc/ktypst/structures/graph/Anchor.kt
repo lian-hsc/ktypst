@@ -1,6 +1,6 @@
 package me.lian.hsc.ktypst.structures.graph
 
-enum class Direction(val value: String) {
+enum class Anchor(val value: String) {
 
     North("\"north\""),
     NorthEast("\"north-east\""),

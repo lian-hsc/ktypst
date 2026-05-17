@@ -25,10 +25,15 @@ data class AbsolutePosition(val x: Double, val y: Double) : Position {
  */
 data class RelativePosition(val delta: Point<Double>, val reference: String) : Position {
 
-    override fun resolve(positions: Map<String, Position>) = positions[reference]
-        ?.resolve(positions)
-        ?.let { Point(it.x + delta.x, it.y + delta.y) }
-        ?: error("Reference '$reference' not found in positions map")
+    private var resolved: Point<Double>? = null
+
+    override fun resolve(positions: Map<String, Position>) =
+        resolved
+            ?: positions[reference]
+                ?.resolve(positions)
+                ?.let { Point(it.x + delta.x, it.y + delta.y) }
+                ?.also { resolved = it }
+            ?: error("Reference '$reference' not found in positions map")
 
 }
 

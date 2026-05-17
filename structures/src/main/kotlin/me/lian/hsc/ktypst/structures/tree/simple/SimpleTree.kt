@@ -5,6 +5,7 @@ import lian.hsc.ktypst.stdlib.cetz.CetzShape
 import lian.hsc.ktypst.stdlib.visualize.paint.Color
 import lian.hsc.ktypst.stdlib.visualize.paint.Paint
 import me.lian.hsc.ktypst.structures.StructureDslMarker
+import me.lian.hsc.ktypst.structures.layout.LayoutPart
 import me.lian.hsc.ktypst.structures.tree.layout.PackedTreeLayoutEngine
 import me.lian.hsc.ktypst.structures.tree.layout.TreeLayoutEngine
 import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeHolder
@@ -117,7 +118,7 @@ sealed class TreeDsl<Type : TreeDsl<Type>>(parent: Type?) {
         )
     }
 
-    internal fun build(layoutEngine: TreeLayoutEngine, renderEngine: SimpleTreeRenderEngine): String {
+    internal fun build(layoutEngine: TreeLayoutEngine, renderEngine: SimpleTreeRenderEngine): LayoutPart {
         val holder = toHolder()
         val layout = layoutEngine.layout(holder)
         return renderEngine.render(layout)

@@ -5,6 +5,7 @@ import lian.hsc.ktypst.stdlib.cetz.CetzShape
 import lian.hsc.ktypst.stdlib.visualize.paint.Color
 import lian.hsc.ktypst.stdlib.visualize.paint.Paint
 import me.lian.hsc.ktypst.structures.StructureDslMarker
+import me.lian.hsc.ktypst.structures.layout.LayoutPart
 import me.lian.hsc.ktypst.structures.tree.layout.PackedTreeLayoutEngine
 import me.lian.hsc.ktypst.structures.tree.layout.TreeLayoutEngine
 import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeHolder
@@ -80,7 +81,7 @@ class BTreeDsl(parent: BTreeDsl? = null) {
 
     internal fun toHolder(): TreeNodeHolder<BTreeNodeModel> {
         check(children.isEmpty() || children.size == keys.size + 1) {
-            "Expected 0 or ${keys.size + 1} children, got ${children.size}"
+            "Expected 0 or ${keys.size + 1} children for node ${keys.joinToString("-")}, got ${children.size}"
         }
 
         return TreeNodeHolder(
@@ -99,7 +100,7 @@ class BTreeDsl(parent: BTreeDsl? = null) {
         )
     }
 
-    internal fun build(layoutEngine: TreeLayoutEngine, renderEngine: BTreeRenderEngine): String {
+    internal fun build(layoutEngine: TreeLayoutEngine, renderEngine: BTreeRenderEngine): LayoutPart {
         val holder = toHolder()
         val layout = layoutEngine.layout(holder)
         return renderEngine.render(layout)

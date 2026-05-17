@@ -4,6 +4,11 @@ import lian.hsc.ktypst.stdlib.cetz.CetzLine
 import lian.hsc.ktypst.stdlib.cetz.CetzShape
 import lian.hsc.ktypst.stdlib.visualize.Point
 import lian.hsc.ktypst.stdlib.visualize.paint.Paint
+import me.lian.hsc.ktypst.structures.layout.Box
+import me.lian.hsc.ktypst.structures.layout.LayoutPart
+import me.lian.hsc.ktypst.structures.layout.LayoutPartBuilder
+import me.lian.hsc.ktypst.structures.layout.buildLayoutPart
+import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeLayout
 
 data class GraphNode(
     val key: String,
@@ -20,29 +25,36 @@ data class GraphEdge(
     val content: String?,
     val contentPosition: Double?,
     val contentAngle: ContentAngle?,
-    val contentAnchor: Direction?,
+    val contentAnchor: Anchor?,
     val contentPadding: Double?,
     val bend: Double?,
     val fillContent: Paint,
 )
 
+/**
+ * A graph render engine that gets the nodes and edges of a graph and renders it as Typst code.
+ */
 interface GraphRenderEngine {
 
-    fun render(nodes: List<GraphNode>, edges: List<GraphEdge>): String
+    /**
+     * Renders the given [nodes] and [edges] as Typst code.
+     */
+    fun render(nodes: List<GraphNode>, edges: List<GraphEdge>): LayoutPart
 
 }
 
-abstract class GraphRenderHelper : GraphRenderEngine {
+/**
+ * An abstract render engine that handles placement.
+ */
+abstract class AbstractGraphRenderEngine : GraphRenderEngine {
 
     abstract fun getContent(node: GraphNode): String?
 
-    override fun render(nodes: List<GraphNode>, edges: List<GraphEdge>) = buildString {
+    override fun render(nodes: List<GraphNode>, edges: List<GraphEdge>) = buildLayoutPart {
+        +"#import \"@preview/cetz:0.5.1\""
+
         appendLine(
             """
-            #set page(width: auto, height: auto, fill: none, margin: 1em)
-
-            #import "@preview/cetz:0.5.1"
-
             #let curve-points(ctx, from, to, bend) = {
               import cetz.vector
 
@@ -82,15 +94,17 @@ abstract class GraphRenderHelper : GraphRenderEngine {
         appendLine("})")
     }
 
-    fun StringBuilder.render(node: GraphNode) {
+    fun LayoutPartBuilder.render(node: GraphNode) {
+        +Box(node.key, node.position.copy(y = -node.position.y), node.shape.width, node.shape.height)
         appendLine(node.shape.create(node.position, node.key))
+
         val content = getContent(node)
         if (content != null) {
             appendLine("content(\"${node.key}\", text(fill: ${node.fillContent.value})[${content}])")
         }
     }
 
-    fun StringBuilder.render(edge: GraphEdge) {
+    fun LayoutPartBuilder.render(edge: GraphEdge) {
         if (edge.bend != null) appendLine("get-ctx(ctx => {")
         appendLine(
             edge.line.create(
@@ -121,13 +135,19 @@ abstract class GraphRenderHelper : GraphRenderEngine {
 
 }
 
-object EmptyContentAsKeyGraphRender : GraphRenderHelper() {
+/**
+ * A render engine that renders nodes with no content as nodes with their key as content.
+ */
+object EmptyContentAsKeyGraphRender : AbstractGraphRenderEngine() {
 
     override fun getContent(node: GraphNode): String = node.content ?: node.key
 
 }
 
-object EmptyContentAsEmptyGraphRender : GraphRenderHelper() {
+/**
+ * A render engine that renders nodes with no content as empty nodes.
+ */
+object EmptyContentAsEmptyGraphRender : AbstractGraphRenderEngine() {
 
     override fun getContent(node: GraphNode): String? = node.content
 
