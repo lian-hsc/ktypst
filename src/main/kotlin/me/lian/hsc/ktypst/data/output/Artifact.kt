@@ -4,7 +4,7 @@ import kotlin.io.encoding.Base64
 
 data class Artifact(val content: ByteArray) {
 
-    val base64 = Base64.UrlSafe.encode(content)
+    val base64 = Base64.encode(content)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
