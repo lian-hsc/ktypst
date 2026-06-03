@@ -4,8 +4,17 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
 import me.lian.hsc.ktypst.backend.TypstBackend
 import me.lian.hsc.ktypst.data.command.*
+import me.lian.hsc.ktypst.data.command.compile.DependenciesFormat
+import me.lian.hsc.ktypst.data.command.compile.Output
+import me.lian.hsc.ktypst.data.command.compile.CompileOutputFormat
+import me.lian.hsc.ktypst.data.command.compile.Pages
+import me.lian.hsc.ktypst.data.command.compile.PdfStandard
+import me.lian.hsc.ktypst.data.command.compile.TypstCompileCommand
+import me.lian.hsc.ktypst.data.command.query.TypstQueryCommand
 import me.lian.hsc.ktypst.data.output.Artifact
+import me.lian.hsc.ktypst.data.output.Status
 import me.lian.hsc.ktypst.data.output.TypstCompileOutput
+import me.lian.hsc.ktypst.data.output.TypstQueryOutput
 import me.lian.hsc.ktypst.util.ExperimentalTypstFeature
 import java.nio.file.Path
 import java.time.ZonedDateTime
@@ -21,7 +30,7 @@ class TypstDslTest {
     fun `typst dsl builds command and calls backend`() = runBlocking {
         val fixedCreationTime = ZonedDateTime.parse("2024-01-01T00:00:00Z")
         val expectedOutput = TypstCompileOutput(
-            status = TypstCompileOutput.Status.Success,
+            status = Status.Success,
             error = null,
             downloadedPackages = emptyList(),
             stdArtifact = Artifact("ok".encodeToByteArray())
@@ -32,7 +41,7 @@ class TypstDslTest {
             +"= Hello"
             outputAsResult()
             cert = Path.of("/tmp/cert.pem")
-            format = OutputFormat.PDF
+            format = CompileOutputFormat.PDF
             projectRoot = Path.of("/tmp/project")
             inputForTypst("name", "world")
             fontPath(Path.of("/tmp/fonts"))
@@ -62,7 +71,7 @@ class TypstDslTest {
         assertEquals(Input.Content("= Hello"), command.input)
         assertEquals(Output.ToResult, command.output)
         assertEquals(Path.of("/tmp/cert.pem"), command.cert)
-        assertEquals(OutputFormat.PDF, command.format)
+        assertEquals(CompileOutputFormat.PDF, command.format)
         assertEquals(Path.of("/tmp/project"), command.projectRoot)
         assertEquals(mapOf("name" to "world"), command.inputs)
         assertEquals(listOf(Path.of("/tmp/fonts")), command.fontPaths)
@@ -120,6 +129,10 @@ class TypstDslTest {
             calls++
             lastCommand = command
             return response
+        }
+
+        override suspend fun execute(command: TypstQueryCommand, dispatcher: CoroutineDispatcher): TypstQueryOutput {
+            throw NotImplementedError("Query command is not expected to be called in this test")
         }
     }
 }

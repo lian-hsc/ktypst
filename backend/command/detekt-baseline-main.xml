@@ -2,7 +2,7 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>CyclomaticComplexMethod:CommandTypstBackend.kt:CommandTypstBackend$private fun createCommand</ID>
+    <ID>CyclomaticComplexMethod:CommandTypstBackend.kt:CommandTypstBackend$private fun MutableList&lt;String&gt;.appendCommonArguments</ID>
     <ID>LabeledExpression:CommandTypstBackend.kt:CommandTypstBackend$@coroutineScope</ID>
     <ID>NullableToStringCall:CommandTypstBackend.kt:CommandTypstBackend$${command.jobs}</ID>
     <ID>NullableToStringCall:CommandTypstBackend.kt:CommandTypstBackend$${command.ppi}</ID>
@@ -11,9 +11,12 @@
     <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.dependenciesFormat!!</ID>
     <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.dependenciesPath!!</ID>
     <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.diagnosticsFormat!!</ID>
+    <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.field!!</ID>
     <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.format!!</ID>
     <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.packageCacheDirectory!!</ID>
     <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.packageDirectory!!</ID>
     <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.projectRoot!!</ID>
+    <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$command.target!!</ID>
+    <ID>UnsafeCallOnNullableType:CommandTypstBackend.kt:CommandTypstBackend$result.first!!</ID>
   </CurrentIssues>
 </SmellBaseline>

@@ -1,4 +1,4 @@
-package me.lian.hsc.ktypst.data.command
+package me.lian.hsc.ktypst.data.command.compile
 
 sealed interface Pages {
 

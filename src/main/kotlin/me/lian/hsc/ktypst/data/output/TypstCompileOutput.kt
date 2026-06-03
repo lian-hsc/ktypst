@@ -8,11 +8,4 @@ data class TypstCompileOutput(
     val error: String?,
     val downloadedPackages: List<String>,
     val stdArtifact: Artifact?,
-) {
-
-    enum class Status {
-        Success,
-        Failure,
-    }
-
-}
+)

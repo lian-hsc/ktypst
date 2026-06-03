@@ -2,8 +2,9 @@
 <SmellBaseline>
   <ManuallySuppressedIssues/>
   <CurrentIssues>
-    <ID>LongMethod:TypstDslTest.kt:TypstDslTest$@Test @OptIn(ExperimentalTypstFeature::class) fun `typst dsl builds command and calls backend`</ID>
-    <ID>NotImplementedDeclaration:TypstDslTest.kt:TypstDslTest.CapturingBackend$throw NotImplementedError("Query command is not expected to be called in this test")</ID>
+    <ID>LongParameterList:TypstCommand.kt:TypstCommand</ID>
+    <ID>LongParameterList:TypstCompileCommand.kt:TypstCompileCommand</ID>
+    <ID>LongParameterList:TypstQueryCommand.kt:TypstQueryCommand</ID>
     <ID>OutdatedDocumentation:TypstCompileCommand.kt:TypstCompileCommand : TypstCommand</ID>
     <ID>OutdatedDocumentation:TypstQueryCommand.kt:TypstQueryCommand : TypstCommand</ID>
     <ID>TooManyFunctions:Typst.kt:Typst</ID>

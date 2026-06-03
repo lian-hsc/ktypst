@@ -3,6 +3,13 @@ package me.lian.hsc.ktypst.backend.command
 import io.mockk.*
 import kotlinx.coroutines.test.runTest
 import me.lian.hsc.ktypst.data.command.*
+import me.lian.hsc.ktypst.data.command.compile.DependenciesFormat
+import me.lian.hsc.ktypst.data.command.compile.Output
+import me.lian.hsc.ktypst.data.command.compile.CompileOutputFormat
+import me.lian.hsc.ktypst.data.command.compile.Pages
+import me.lian.hsc.ktypst.data.command.compile.PdfStandard
+import me.lian.hsc.ktypst.data.command.compile.TypstCompileCommand
+import me.lian.hsc.ktypst.data.output.Status
 import me.lian.hsc.ktypst.data.output.TypstCompileOutput
 import me.lian.hsc.ktypst.util.ExperimentalTypstFeature
 import java.io.BufferedWriter
@@ -43,7 +50,7 @@ class CommandTypstBackendArgumentTest {
                 input = Input.File(Path.of("/tmp/input.typ")),
                 output = Output.Name("result.pdf"),
                 cert = Path.of("/tmp/cert.pem"),
-                format = OutputFormat.PDF,
+                format = CompileOutputFormat.PDF,
                 projectRoot = Path.of("/tmp/project"),
                 inputs = linkedMapOf("a" to "1", "b" to "2"),
                 fontPaths = listOf(Path.of("/tmp/fonts-1"), Path.of("/tmp/fonts-2")),
@@ -65,7 +72,7 @@ class CommandTypstBackendArgumentTest {
 
             val output = CommandTypstBackend.execute(command)
 
-            assertEquals(TypstCompileOutput.Status.Success, output.status)
+            assertEquals(Status.Success, output.status)
             assertNull(output.error)
             assertNull(output.stdArtifact)
 
@@ -77,6 +84,12 @@ class CommandTypstBackendArgumentTest {
                     "compile",
                     "--cert=/tmp/cert.pem",
                     "--format=pdf",
+                    "--pages=1,2-4",
+                    "--pdf-standards=a-1b,ua-1",
+                    "--no-pdf-tags",
+                    "--ppi=300",
+                    "--deps=/tmp/deps",
+                    "--deps-format=json",
                     "--project-root=/tmp/project",
                     "--input=a=1",
                     "--input=b=2",
@@ -86,12 +99,6 @@ class CommandTypstBackendArgumentTest {
                     "--package-path=/tmp/packages",
                     "--package-cache-path=/tmp/cache",
                     "--creation-timestamp=1704067200",
-                    "--pages=1,2-4",
-                    "--pdf-standards=a-1b,ua-1",
-                    "--no-pdf-tags",
-                    "--ppi=300",
-                    "--deps=/tmp/deps",
-                    "--deps-format=json",
                     "--jobs=8",
                     "--features=a11y-extras",
                     "--diagnostic-format=short",

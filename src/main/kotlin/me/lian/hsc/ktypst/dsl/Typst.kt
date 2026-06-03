@@ -2,6 +2,12 @@ package me.lian.hsc.ktypst.dsl
 
 import me.lian.hsc.ktypst.backend.TypstBackend
 import me.lian.hsc.ktypst.data.command.*
+import me.lian.hsc.ktypst.data.command.compile.DependenciesFormat
+import me.lian.hsc.ktypst.data.command.compile.Output
+import me.lian.hsc.ktypst.data.command.compile.CompileOutputFormat
+import me.lian.hsc.ktypst.data.command.compile.Pages
+import me.lian.hsc.ktypst.data.command.compile.PdfStandard
+import me.lian.hsc.ktypst.data.command.compile.TypstCompileCommand
 import me.lian.hsc.ktypst.data.output.TypstCompileOutput
 import java.nio.file.Path
 import java.time.ZonedDateTime
@@ -36,7 +42,7 @@ class Typst {
         }
 
     var cert: Path? = null
-    var format: OutputFormat? = null
+    var format: CompileOutputFormat? = null
     var projectRoot: Path? = null
     var ignoreSystemFonts: Boolean = false
     var ignoreEmbeddedFonts: Boolean = false
