@@ -54,7 +54,7 @@ abstract class AbstractBTreeRenderEngine : BTreeRenderEngine {
 
         appendLine("group({")
         val left = node.x - node.width / 2
-        for ((index, child) in node.children.withIndex()) {
+        for ((index, _) in node.children.withIndex()) {
             val pointerX =
                 left +
                     node.model.content.width * index +
@@ -62,9 +62,9 @@ abstract class AbstractBTreeRenderEngine : BTreeRenderEngine {
                     node.model.pointer.width / 2
 
             +Box(
-                "${node.model.name}>p$index",
-                Point(pointerX, -node.y),
-                node.model.pointer.width, node.model.pointer.height
+                name = "${node.model.name}>p$index",
+                center = Point(pointerX, -node.y),
+                width = node.model.pointer.width, height = node.model.pointer.height
             )
             appendLine(
                 node.model.pointer.create(
@@ -82,9 +82,9 @@ abstract class AbstractBTreeRenderEngine : BTreeRenderEngine {
                     node.model.content.width / 2
 
             +Box(
-                "${node.model.name}>$key",
-                Point(centerX, -node.y),
-                node.model.content.width, node.model.content.height
+                name = "${node.model.name}>$key",
+                center = Point(centerX, -node.y),
+                width = node.model.content.width, height = node.model.content.height
             )
             appendLine(
                 node.model.content.create(
@@ -121,9 +121,9 @@ abstract class AbstractBTreeRenderEngine : BTreeRenderEngine {
             val centerX = left + node.model.content.width * index + node.model.content.width / 2
 
             +Box(
-                "${node.model.name}>$key",
-                Point(centerX, -node.y),
-                node.model.content.width, node.model.content.height
+                name = "${node.model.name}>$key",
+                center = Point(centerX, -node.y),
+                width = node.model.content.width, height = node.model.content.height
 
             )
             appendLine(

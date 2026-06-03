@@ -8,7 +8,6 @@ import me.lian.hsc.ktypst.structures.layout.Box
 import me.lian.hsc.ktypst.structures.layout.LayoutPart
 import me.lian.hsc.ktypst.structures.layout.LayoutPartBuilder
 import me.lian.hsc.ktypst.structures.layout.buildLayoutPart
-import me.lian.hsc.ktypst.structures.tree.layout.TreeNodeLayout
 
 data class GraphNode(
     val key: String,
@@ -95,7 +94,12 @@ abstract class AbstractGraphRenderEngine : GraphRenderEngine {
     }
 
     fun LayoutPartBuilder.render(node: GraphNode) {
-        +Box(node.key, node.position.copy(y = -node.position.y), node.shape.width, node.shape.height)
+        +Box(
+            name = node.key,
+            center = node.position.copy(y = -node.position.y),
+            width = node.shape.width,
+            height = node.shape.height
+        )
         appendLine(node.shape.create(node.position, node.key))
 
         val content = getContent(node)

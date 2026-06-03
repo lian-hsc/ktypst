@@ -3,13 +3,17 @@
   <ManuallySuppressedIssues/>
   <CurrentIssues>
     <ID>LongMethod:PackedTreeLayoutEngine.kt:PackedTreeLayoutEngine$private fun &lt;T&gt; layoutSubtree: Subtree&lt;T&gt;</ID>
+    <ID>LongMethod:Render.kt:AbstractBTreeRenderEngine$private fun LayoutPartBuilder.render</ID>
     <ID>MagicNumber:BTree.kt:BTreeDsl$.5</ID>
-    <ID>MagicNumber:GraphRender.kt:GraphRenderHelper$0.1</ID>
-    <ID>MagicNumber:GraphRender.kt:GraphRenderHelper$100</ID>
-    <ID>MagicNumber:GraphRender.kt:GraphRenderHelper$50</ID>
-    <ID>MaxLineLength:GraphRender.kt:GraphRenderHelper$if</ID>
+    <ID>MagicNumber:GraphRender.kt:AbstractGraphRenderEngine$0.1</ID>
+    <ID>MagicNumber:GraphRender.kt:AbstractGraphRenderEngine$100</ID>
+    <ID>MagicNumber:GraphRender.kt:AbstractGraphRenderEngine$50</ID>
+    <ID>MaxLineLength:Graph.kt:GraphNodeDsl$position = RelativePosition(Point(x * graph.relativePositionFactor, y * graph.relativePositionFactor), reference)</ID>
+    <ID>MaxLineLength:GraphRender.kt:AbstractGraphRenderEngine$if</ID>
+    <ID>NullableToStringCall:Marked.kt:${queryResult.error}</ID>
     <ID>PropertyUsedBeforeDeclaration:BTree.kt:BTreeDsl$style</ID>
     <ID>PropertyUsedBeforeDeclaration:SimpleTree.kt:TreeDsl$style</ID>
+    <ID>UnsafeCallOnNullableType:Marked.kt:queryResult.result!!</ID>
     <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _content: CetzShape? = null</ID>
     <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _contentFill: Paint? = null</ID>
     <ID>VarCouldBeVal:BTree.kt:BTreeNodeStyleDsl$private var _levelSpace: Double? = null</ID>

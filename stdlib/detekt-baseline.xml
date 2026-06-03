@@ -6,6 +6,18 @@
     <ID>MagicNumber:Color.kt:Color.Rgb$255</ID>
     <ID>MagicNumber:Gradient.kt:Gradient.Conic$0.5</ID>
     <ID>MagicNumber:Gradient.kt:Gradient.Radial$0.5</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Centimeters$10.0</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Centimeters$2.54</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Centimeters$72.0</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Inches$2.54</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Inches$25.4</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Inches$72.0</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Millimeters$10.0</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Millimeters$25.4</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Millimeters$72.0</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Points$2.54</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Points$25.4</ID>
+    <ID>MagicNumber:Length.kt:Length.Unit.Points$72.0</ID>
     <ID>MagicNumber:Ratio.kt:100</ID>
     <ID>MaxLineLength:Gradient.kt:Gradient.Radial$*</ID>
     <ID>MaxLineLength:Gradient.kt:Gradient.Stops.Named.Turbo$*</ID>

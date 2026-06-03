@@ -1,9 +1,7 @@
 package me.lian.hsc.ktypst.structures.tree.simple
 
 import lian.hsc.ktypst.stdlib.visualize.Point
-import me.lian.hsc.ktypst.structures.graph.GraphNode
 import me.lian.hsc.ktypst.structures.layout.Box
-import me.lian.hsc.ktypst.structures.layout.Layout
 import me.lian.hsc.ktypst.structures.layout.LayoutPart
 import me.lian.hsc.ktypst.structures.layout.LayoutPartBuilder
 import me.lian.hsc.ktypst.structures.layout.buildLayoutPart
@@ -44,9 +42,9 @@ abstract class AbstractSimpleTreeRenderEngine : SimpleTreeRenderEngine {
 
     private fun LayoutPartBuilder.render(node: TreeNodeLayout<SimpleTreeNodeModel>) {
         +Box(
-            node.model.key,
-            Point(node.x, -node.y),
-            node.model.cetzShape.width, node.model.cetzShape.height
+            name = node.model.key,
+            center = Point(node.x, -node.y),
+            width = node.model.cetzShape.width, height = node.model.cetzShape.height
         )
         appendLine(node.model.cetzShape.create(Point(node.x, node.y), node.model.key))
 
