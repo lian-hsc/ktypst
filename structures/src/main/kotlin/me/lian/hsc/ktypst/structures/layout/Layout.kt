@@ -14,6 +14,9 @@ data class Layout(
         boxes = boxes.map { it.scale(factor) }
     )
 
+    fun scaleToWidth(width: Double) = scale(width / this.width)
+    fun scaleToHeight(height: Double) = scale(height / this.height)
+
     operator fun get(name: String): Box = boxes.first { it.name == name }
 
 }
