@@ -109,7 +109,7 @@ object CommandTypstBackend : TypstBackend {
     private fun MutableList<String>.appendCommonArguments(command: TypstCommand) {
         val isWindows = System.getProperty("os.name").lowercase().startsWith("windows")
 
-        if (command.projectRoot != null) add("--project-root=${command.projectRoot!!.absolutePathString()}")
+        if (command.projectRoot != null) add("--root=${command.projectRoot!!.absolutePathString()}")
 
         command.inputs.forEach { (key, value) ->
             add("--input=$key=$value")

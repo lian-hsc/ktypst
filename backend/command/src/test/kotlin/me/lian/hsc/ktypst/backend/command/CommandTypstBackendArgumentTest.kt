@@ -90,7 +90,7 @@ class CommandTypstBackendArgumentTest {
                     "--ppi=300",
                     "--deps=/tmp/deps",
                     "--deps-format=json",
-                    "--project-root=/tmp/project",
+                    "--root=/tmp/project",
                     "--input=a=1",
                     "--input=b=2",
                     "--font-paths=/tmp/fonts-1${separator}/tmp/fonts-2",
