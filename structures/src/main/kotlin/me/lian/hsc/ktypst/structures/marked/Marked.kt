@@ -48,11 +48,9 @@ suspend fun marked(document: String, backend: TypstBackend): LayoutPart = buildL
         field = "value"
     }
 
-    check(queryResult.status != Status.Success) {
+    check(queryResult.status == Status.Success) {
         "Query failed with status ${queryResult.status}: ${queryResult.error}"
     }
-
-    println(queryResult.result!!)
 
     val json = jsonMapper.readTree(queryResult.result!!) as? ArrayNode
         ?: error("Could not parse JSON")
